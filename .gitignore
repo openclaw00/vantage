@@ -1,0 +1,34 @@
+# deps
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# env — never commit secrets
+.env
+.env.local
+.env.*.local
+
+# Prisma local SQLite dev database
+prisma/dev.db
+prisma/dev.db-journal
+
+# build artefacts
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# TypeScript
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Vercel
+.vercel

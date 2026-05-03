@@ -65,7 +65,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
       <aside className="hidden lg:block w-52 shrink-0 space-y-6">
         {/* Subject */}
         <div>
-          <div className="font-mono text-[10px] text-[var(--color-text-faint)] uppercase tracking-widest mb-2">
+          <div className="font-mono text-[10px] text-white/25 uppercase tracking-widest mb-2">
             Subject
           </div>
           <div className="space-y-0.5">
@@ -73,8 +73,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
               onClick={() => updateFilter("subject", undefined)}
               className={`w-full text-left px-2.5 py-1.5 rounded text-sm transition-colors ${
                 !filters.subject
-                  ? "bg-[var(--color-amber-pale)] text-[var(--color-amber-light)]"
-                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-2)]"
+                  ? "bg-violet-500/10 text-violet-400"
+                  : "text-white/50 hover:text-white hover:bg-white/[0.04]"
               }`}
             >
               All subjects
@@ -85,8 +85,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                 onClick={() => updateFilter("subject", s.id)}
                 className={`w-full text-left px-2.5 py-1.5 rounded text-sm transition-colors ${
                   filters.subject === s.id
-                    ? "bg-[var(--color-amber-pale)] text-[var(--color-amber-light)]"
-                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-2)]"
+                    ? "bg-violet-500/10 text-violet-400"
+                    : "text-white/50 hover:text-white hover:bg-white/[0.04]"
                 }`}
               >
                 {s.name}
@@ -98,7 +98,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
         {/* Topic */}
         {filteredTopics.length > 0 && (
           <div>
-            <div className="font-mono text-[10px] text-[var(--color-text-faint)] uppercase tracking-widest mb-2">
+            <div className="font-mono text-[10px] text-white/25 uppercase tracking-widest mb-2">
               Topic
             </div>
             <div className="space-y-0.5">
@@ -106,8 +106,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                 onClick={() => updateFilter("topic", undefined)}
                 className={`w-full text-left px-2.5 py-1.5 rounded text-xs transition-colors ${
                   !filters.topic
-                    ? "text-[var(--color-amber-light)]"
-                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                    ? "text-violet-400"
+                    : "text-white/50 hover:text-white"
                 }`}
               >
                 All topics
@@ -118,8 +118,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                   onClick={() => updateFilter("topic", t.id)}
                   className={`w-full text-left px-2.5 py-1.5 rounded text-xs transition-colors ${
                     filters.topic === t.id
-                      ? "text-[var(--color-amber-light)]"
-                      : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                      ? "text-violet-400"
+                      : "text-white/50 hover:text-white"
                   }`}
                 >
                   {t.name}
@@ -131,7 +131,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
 
         {/* Difficulty */}
         <div>
-          <div className="font-mono text-[10px] text-[var(--color-text-faint)] uppercase tracking-widest mb-2">
+          <div className="font-mono text-[10px] text-white/25 uppercase tracking-widest mb-2">
             Difficulty
           </div>
           <div className="space-y-0.5">
@@ -139,8 +139,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
               onClick={() => updateFilter("difficulty", undefined)}
               className={`w-full text-left px-2.5 py-1.5 rounded text-sm transition-colors ${
                 !filters.difficulty
-                  ? "text-[var(--color-amber-light)]"
-                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                  ? "text-violet-400"
+                  : "text-white/50 hover:text-white"
               }`}
             >
               All
@@ -151,8 +151,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                 onClick={() => updateFilter("difficulty", d)}
                 className={`w-full text-left px-2.5 py-1.5 rounded text-sm transition-colors flex items-center gap-2 ${
                   filters.difficulty === d
-                    ? "text-[var(--color-amber-light)]"
-                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                    ? "text-violet-400"
+                    : "text-white/50 hover:text-white"
                 }`}
               >
                 <span
@@ -168,7 +168,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
 
         {/* Year */}
         <div>
-          <div className="font-mono text-[10px] text-[var(--color-text-faint)] uppercase tracking-widest mb-2">
+          <div className="font-mono text-[10px] text-white/25 uppercase tracking-widest mb-2">
             Year
           </div>
           <div className="space-y-0.5">
@@ -176,8 +176,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
               onClick={() => updateFilter("year", undefined)}
               className={`w-full text-left px-2.5 py-1.5 rounded text-sm transition-colors ${
                 !filters.year
-                  ? "text-[var(--color-amber-light)]"
-                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                  ? "text-violet-400"
+                  : "text-white/50 hover:text-white"
               }`}
             >
               All years
@@ -188,8 +188,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                 onClick={() => updateFilter("year", String(y))}
                 className={`w-full text-left px-2.5 py-1.5 rounded text-sm font-mono transition-colors ${
                   filters.year === String(y)
-                    ? "text-[var(--color-amber-light)]"
-                    : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                    ? "text-violet-400"
+                    : "text-white/50 hover:text-white"
                 }`}
               >
                 {y}
@@ -202,7 +202,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
         {(filters.subject || filters.topic || filters.difficulty || filters.year) && (
           <button
             onClick={() => router.push(pathname)}
-            className="text-xs text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors"
+            className="text-xs text-white/25 hover:text-white/50 transition-colors"
           >
             ✕ Clear all filters
           </button>
@@ -212,11 +212,11 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
       {/* Question list */}
       <div className="flex-1 min-w-0 space-y-3">
         {questions.length === 0 ? (
-          <div className="card p-12 text-center">
-            <div className="text-[var(--color-text-muted)] mb-2">No questions match your filters.</div>
+          <div className="glass rounded-2xl p-12 text-center">
+            <div className="text-white/50 mb-2">No questions match your filters.</div>
             <button
               onClick={() => router.push(pathname)}
-              className="text-sm text-[var(--color-amber)] hover:underline"
+              className="text-sm text-violet-400 hover:underline"
             >
               Clear filters
             </button>
@@ -226,7 +226,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
             <Link
               key={q.id}
               href={`/questions/${q.id}`}
-              className="card flex items-start gap-4 p-5 hover:border-[var(--color-border-2)] hover:bg-[var(--color-surface-2)] transition-all group block"
+              className="glass rounded-2xl flex items-start gap-4 p-5 hover:border-white/[0.12] hover:bg-white/[0.04] transition-all group block"
             >
               <div className="shrink-0 pt-0.5">
                 <div
@@ -235,7 +235,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                 >
                   {q.questionNumber}
                 </div>
-                <div className="font-mono text-[10px] text-[var(--color-text-faint)] mt-1">
+                <div className="font-mono text-[10px] text-white/25 mt-1">
                   {q.year}
                 </div>
               </div>
@@ -252,7 +252,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                     {q.subject.name}
                   </span>
                   {q.topic && (
-                    <span className="text-xs text-[var(--color-text-faint)] border border-[var(--color-border)] px-2 py-0.5 rounded-full">
+                    <span className="text-xs text-white/25 border border-white/[0.07] px-2 py-0.5 rounded-full">
                       {q.topic.name}
                     </span>
                   )}
@@ -260,24 +260,24 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                   <DifficultyBadge difficulty={q.difficulty} />
                 </div>
 
-                <p className="text-sm text-[var(--color-text)] leading-relaxed line-clamp-2">
+                <p className="text-sm text-white leading-relaxed line-clamp-2">
                   {q.content}
                 </p>
               </div>
 
               <div className="shrink-0 text-right">
-                <div className="font-mono text-sm text-[var(--color-text-muted)]">
+                <div className="font-mono text-sm text-white/50">
                   [{q.marks}m]
                 </div>
                 {q._count.attempts > 0 && (
-                  <div className="font-mono text-[10px] text-[var(--color-text-faint)] mt-0.5">
+                  <div className="font-mono text-[10px] text-white/25 mt-0.5">
                     {q._count.attempts} attempt{q._count.attempts !== 1 ? "s" : ""}
                   </div>
                 )}
               </div>
 
               <svg
-                className="w-4 h-4 text-[var(--color-text-faint)] group-hover:text-[var(--color-text-muted)] transition-colors shrink-0 mt-0.5"
+                className="w-4 h-4 text-white/25 group-hover:text-white/50 transition-colors shrink-0 mt-0.5"
                 fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -289,7 +289,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex items-center justify-between pt-4">
-            <span className="text-xs text-[var(--color-text-muted)] font-mono">
+            <span className="text-xs text-white/50 font-mono">
               {total} questions · page {page} of {totalPages}
             </span>
             <div className="flex gap-2">
@@ -298,7 +298,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                   href={`${pathname}?${new URLSearchParams({ ...Object.fromEntries(
                     Object.entries(filters).filter(([, v]) => v !== undefined) as [string, string][]
                   ), page: String(page - 1) })}`}
-                  className="px-3 py-1.5 border border-[var(--color-border)] rounded text-xs text-[var(--color-text-muted)] hover:border-[var(--color-border-2)] hover:text-[var(--color-text)] transition-colors"
+                  className="px-3 py-1.5 border border-white/[0.07] rounded text-xs text-white/50 hover:border-white/[0.12] hover:text-white transition-colors"
                 >
                   ← Previous
                 </Link>
@@ -308,7 +308,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                   href={`${pathname}?${new URLSearchParams({ ...Object.fromEntries(
                     Object.entries(filters).filter(([, v]) => v !== undefined) as [string, string][]
                   ), page: String(page + 1) })}`}
-                  className="px-3 py-1.5 border border-[var(--color-border)] rounded text-xs text-[var(--color-text-muted)] hover:border-[var(--color-border-2)] hover:text-[var(--color-text)] transition-colors"
+                  className="px-3 py-1.5 border border-white/[0.07] rounded text-xs text-white/50 hover:border-white/[0.12] hover:text-white transition-colors"
                 >
                   Next →
                 </Link>

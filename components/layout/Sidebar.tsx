@@ -8,7 +8,7 @@ interface SidebarProps {
   user: { name?: string | null; email: string; tier: "FREE" | "PRO" };
 }
 
-const navItems = [
+const nav = [
   {
     label: "Dashboard",
     href: "/dashboard",
@@ -19,7 +19,7 @@ const navItems = [
     ),
   },
   {
-    label: "Question Bank",
+    label: "Questions",
     href: "/questions",
     icon: (
       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -51,26 +51,29 @@ export function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden md:flex flex-col w-56 shrink-0 border-r border-[var(--color-border)] bg-[var(--color-surface)]">
+    <aside className="hidden md:flex flex-col w-56 shrink-0 border-r border-white/[0.06] bg-white/[0.02] backdrop-blur-sm">
       {/* Logo */}
-      <div className="h-16 flex items-center px-5 border-b border-[var(--color-border)]">
-        <Link href="/dashboard" className="font-serif text-xl text-[var(--color-text)]">
-          Vantage
+      <div className="h-16 flex items-center px-5 border-b border-white/[0.06]">
+        <Link href="/dashboard" className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center shrink-0">
+            <span className="text-white font-bold text-xs">V</span>
+          </div>
+          <span className="font-display font-semibold text-[15px]">Vantage</span>
         </Link>
       </div>
 
       {/* Nav */}
       <nav className="flex-1 py-4 px-3 space-y-0.5">
-        {navItems.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(item.href + "/");
+        {nav.map((item) => {
+          const active = pathname === item.href || (item.href !== "/dashboard" && pathname.startsWith(item.href));
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded text-sm transition-all ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all duration-150 ${
                 active
-                  ? "bg-[var(--color-amber-pale)] text-[var(--color-amber-light)] font-medium"
-                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-surface-2)]"
+                  ? "bg-violet-500/20 text-violet-300 border border-violet-500/25"
+                  : "text-white/40 hover:text-white/80 hover:bg-white/[0.05]"
               }`}
             >
               {item.icon}
@@ -80,28 +83,28 @@ export function Sidebar({ user }: SidebarProps) {
         })}
       </nav>
 
-      {/* User + tier */}
-      <div className="border-t border-[var(--color-border)] p-4 space-y-3">
-        <div className="flex items-center justify-between">
-          <span className="font-mono text-xs px-2 py-0.5 rounded border border-[var(--color-border-2)] text-[var(--color-text-muted)]">
-            {user.tier}
-          </span>
-          {user.tier === "FREE" && (
-            <Link
-              href="/billing"
-              className="font-mono text-[10px] text-[var(--color-amber)] hover:underline"
-            >
-              Upgrade →
-            </Link>
-          )}
-        </div>
-        <div className="min-w-0">
-          <div className="text-sm text-[var(--color-text)] truncate">{user.name ?? "Student"}</div>
-          <div className="text-xs text-[var(--color-text-muted)] truncate">{user.email}</div>
+      {/* User footer */}
+      <div className="border-t border-white/[0.06] p-4 space-y-3">
+        {user.tier === "FREE" && (
+          <Link
+            href="/billing"
+            className="block w-full text-center text-xs py-2 rounded-xl border border-violet-500/30 text-violet-400 hover:bg-violet-500/10 transition-colors font-medium"
+          >
+            ✦ Upgrade to Pro
+          </Link>
+        )}
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center shrink-0 text-xs font-semibold">
+            {(user.name?.[0] ?? user.email[0]).toUpperCase()}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-xs text-white/70 truncate font-medium">{user.name ?? "Student"}</div>
+            <div className="text-[10px] text-white/30 truncate">{user.email}</div>
+          </div>
         </div>
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="w-full text-left text-xs text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors"
+          className="w-full text-left text-[11px] text-white/20 hover:text-white/40 transition-colors"
         >
           Sign out
         </button>

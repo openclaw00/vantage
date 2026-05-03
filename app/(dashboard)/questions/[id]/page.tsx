@@ -91,7 +91,7 @@ export default async function QuestionPage({ params }: { params: { id: string } 
             </span>
           )}
           <LevelBadge level={question.subject.level as "IGCSE" | "A_LEVEL" | "IB_SL" | "IB_HL"} />
-          <DifficultyBadge difficulty={question.difficulty} />
+          <DifficultyBadge difficulty={question.difficulty as "EASY" | "MEDIUM" | "HARD"} />
         </div>
         <div className="flex items-center gap-3">
           {lastScore !== null && (

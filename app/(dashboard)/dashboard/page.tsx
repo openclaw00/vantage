@@ -96,19 +96,19 @@ export default async function DashboardPage() {
       label: "Questions attempted",
       value: data.totalAttempts,
       sub: `of ${data.totalQuestions} available`,
-      color: "text-[var(--color-text)]",
+      color: "text-white",
     },
     {
       label: "Average score",
       value: data.avgScore ? `${data.avgScore}%` : "—",
       sub: data.avgScore >= 70 ? "Good progress" : data.avgScore > 0 ? "Room to improve" : "No scored attempts yet",
-      color: data.avgScore >= 70 ? "text-green-400" : data.avgScore >= 50 ? "text-[var(--color-amber-light)]" : "text-[var(--color-text)]",
+      color: data.avgScore >= 70 ? "text-green-400" : data.avgScore >= 50 ? "text-violet-300" : "text-white",
     },
     {
       label: "Questions today",
       value: data.questionsToday,
       sub: "keep the streak going",
-      color: "text-[var(--color-amber-light)]",
+      color: "text-violet-300",
     },
     {
       label: "Weak topics",
@@ -122,10 +122,10 @@ export default async function DashboardPage() {
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
       <div>
-        <h1 className="font-serif text-4xl text-[var(--color-text)]">
+        <h1 className="font-display font-bold text-4xl text-white">
           Good {getGreeting()}, {firstName}.
         </h1>
-        <p className="text-[var(--color-text-muted)] mt-1 text-sm">
+        <p className="text-white/50 mt-1 text-sm">
           {data.totalAttempts === 0
             ? "Start by attempting a question from the question bank."
             : `You've attempted ${data.totalAttempts} question${data.totalAttempts !== 1 ? "s" : ""}${data.avgScore > 0 ? ` with an average score of ${data.avgScore}%` : ""}.`}
@@ -135,12 +135,12 @@ export default async function DashboardPage() {
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((card) => (
-          <div key={card.label} className="card p-5">
-            <div className="text-xs font-mono text-[var(--color-text-muted)] mb-2 uppercase tracking-wide">
+          <div key={card.label} className="glass rounded-2xl p-5 border border-white/[0.07]">
+            <div className="text-xs font-mono text-white/50 mb-2 uppercase tracking-wide">
               {card.label}
             </div>
-            <div className={`font-serif text-4xl mb-1 ${card.color}`}>{card.value}</div>
-            <div className="text-xs text-[var(--color-text-faint)]">{card.sub}</div>
+            <div className={`font-display font-bold text-4xl mb-1 ${card.color}`}>{card.value}</div>
+            <div className="text-xs text-white/25">{card.sub}</div>
           </div>
         ))}
       </div>
@@ -148,20 +148,20 @@ export default async function DashboardPage() {
       {/* Charts + weak topics row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Score over time chart */}
-        <div className="lg:col-span-2 card p-6">
+        <div className="lg:col-span-2 glass rounded-2xl p-6 border border-white/[0.07]">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-medium text-[var(--color-text)]">Score over time</h2>
-            <span className="font-mono text-xs text-[var(--color-text-muted)]">LAST 30 DAYS</span>
+            <h2 className="font-medium text-white">Score over time</h2>
+            <span className="font-mono text-xs text-white/50">LAST 30 DAYS</span>
           </div>
           {data.scoreOverTime.length > 0 ? (
             <DashboardCharts data={data.scoreOverTime} />
           ) : (
             <div className="h-40 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-[var(--color-text-faint)] text-sm mb-3">No attempts yet</div>
+                <div className="text-white/25 text-sm mb-3">No attempts yet</div>
                 <Link
                   href="/questions"
-                  className="text-[var(--color-amber)] text-sm hover:underline"
+                  className="text-violet-400 text-sm hover:underline"
                 >
                   Start with a question →
                 </Link>
@@ -171,17 +171,17 @@ export default async function DashboardPage() {
         </div>
 
         {/* Weak topics */}
-        <div className="card p-6">
+        <div className="glass rounded-2xl p-6 border border-white/[0.07]">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="font-medium text-[var(--color-text)]">Weak topics</h2>
-            <span className="font-mono text-xs text-[var(--color-text-muted)]">PRIORITY</span>
+            <h2 className="font-medium text-white">Weak topics</h2>
+            <span className="font-mono text-xs text-white/50">PRIORITY</span>
           </div>
           {data.weakTopics.length > 0 ? (
             <div className="space-y-4">
               {data.weakTopics.map((topic) => (
                 <div key={topic.id}>
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-[var(--color-text)]">{topic.name}</span>
+                    <span className="text-sm text-white">{topic.name}</span>
                     <span className="font-mono text-xs text-red-400">{topic.avgScore}%</span>
                   </div>
                   <div className="score-bar">
@@ -190,18 +190,18 @@ export default async function DashboardPage() {
                       style={{ width: `${topic.avgScore}%` }}
                     />
                   </div>
-                  <div className="text-xs text-[var(--color-text-faint)] mt-0.5">
+                  <div className="text-xs text-white/25 mt-0.5">
                     {topic.subject} · {topic.attempts} attempt{topic.attempts !== 1 ? "s" : ""}
                   </div>
                 </div>
               ))}
             </div>
           ) : data.totalAttempts > 0 ? (
-            <div className="text-sm text-[var(--color-text-muted)]">
+            <div className="text-sm text-white/50">
               Great work — no weak topics detected yet.
             </div>
           ) : (
-            <div className="text-sm text-[var(--color-text-muted)]">
+            <div className="text-sm text-white/50">
               Weak topics will appear here after you attempt questions.
             </div>
           )}
@@ -210,14 +210,14 @@ export default async function DashboardPage() {
 
       {/* Recent attempts */}
       {data.recentAttempts.length > 0 && (
-        <div className="card">
-          <div className="flex items-center justify-between p-6 border-b border-[var(--color-border)]">
-            <h2 className="font-medium text-[var(--color-text)]">Recent attempts</h2>
-            <Link href="/questions" className="text-xs text-[var(--color-amber)] hover:underline">
+        <div className="glass rounded-2xl border border-white/[0.07]">
+          <div className="flex items-center justify-between p-6 border-b border-white/[0.07]">
+            <h2 className="font-medium text-white">Recent attempts</h2>
+            <Link href="/questions" className="text-xs text-violet-400 hover:underline">
               All questions →
             </Link>
           </div>
-          <div className="divide-y divide-[var(--color-border)]">
+          <div className="divide-y divide-white/[0.07]">
             {data.recentAttempts.map((attempt) => {
               const pct =
                 attempt.aiScore !== null && attempt.aiMaxScore !== null
@@ -227,39 +227,39 @@ export default async function DashboardPage() {
                 <Link
                   key={attempt.id}
                   href={`/questions/${attempt.questionId}`}
-                  className="flex items-center gap-4 px-6 py-4 hover:bg-[var(--color-surface-2)] transition-colors group"
+                  className="flex items-center gap-4 px-6 py-4 hover:bg-white/[0.04] transition-colors group"
                 >
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="font-mono text-xs text-[var(--color-text-muted)]">
+                      <span className="font-mono text-xs text-white/50">
                         Q{attempt.question.questionNumber}
                       </span>
-                      <span className="text-xs text-[var(--color-text-faint)]">
+                      <span className="text-xs text-white/25">
                         {attempt.question.subject.name}
                       </span>
                       {attempt.question.topic && (
                         <>
-                          <span className="text-[var(--color-text-faint)]">·</span>
-                          <span className="text-xs text-[var(--color-text-faint)]">
+                          <span className="text-white/25">·</span>
+                          <span className="text-xs text-white/25">
                             {attempt.question.topic.name}
                           </span>
                         </>
                       )}
                     </div>
-                    <p className="text-sm text-[var(--color-text-muted)] truncate">
+                    <p className="text-sm text-white/50 truncate">
                       {attempt.question.content.substring(0, 80)}...
                     </p>
                   </div>
                   {pct !== null && (
                     <div
                       className={`font-mono text-sm shrink-0 ${
-                        pct >= 70 ? "text-green-400" : pct >= 50 ? "text-[var(--color-amber-light)]" : "text-red-400"
+                        pct >= 70 ? "text-green-400" : pct >= 50 ? "text-violet-300" : "text-red-400"
                       }`}
                     >
                       {pct}%
                     </div>
                   )}
-                  <svg className="w-4 h-4 text-[var(--color-text-faint)] group-hover:text-[var(--color-text-muted)] transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <svg className="w-4 h-4 text-white/25 group-hover:text-white/50 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                   </svg>
                 </Link>
@@ -271,17 +271,17 @@ export default async function DashboardPage() {
 
       {/* Empty state CTA */}
       {data.totalAttempts === 0 && (
-        <div className="card p-12 text-center">
-          <div className="font-serif text-3xl text-[var(--color-text)] mb-3">
+        <div className="glass rounded-2xl p-12 text-center border border-white/[0.07]">
+          <div className="font-serif text-3xl text-white mb-3">
             Ready to start?
           </div>
-          <p className="text-[var(--color-text-muted)] mb-6 text-sm max-w-sm mx-auto">
+          <p className="text-white/50 mb-6 text-sm max-w-sm mx-auto">
             Browse the question bank, attempt a question, and get instant AI marking against the
             official mark scheme.
           </p>
           <Link
             href="/questions"
-            className="inline-flex items-center gap-2 bg-[var(--color-amber)] text-black px-6 py-3 rounded font-semibold text-sm hover:bg-[var(--color-amber-light)] transition-colors"
+            className="inline-flex items-center gap-2 btn-primary px-6 py-3 rounded font-semibold text-sm "
           >
             Browse questions
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

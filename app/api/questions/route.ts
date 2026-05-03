@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
-import { Difficulty, ExamBoard, Level } from "@prisma/client";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const subjectId  = searchParams.get("subjectId") || undefined;
   const topicId    = searchParams.get("topicId") || undefined;
-  const difficulty = searchParams.get("difficulty") as Difficulty | null;
+  const difficulty = searchParams.get("difficulty") || undefined;
   const year       = searchParams.get("year") ? parseInt(searchParams.get("year")!) : undefined;
-  const examBoard  = searchParams.get("examBoard") as ExamBoard | null;
-  const level      = searchParams.get("level") as Level | null;
+  const examBoard  = searchParams.get("examBoard") || undefined;
+  const level      = searchParams.get("level") || undefined;
   const page       = parseInt(searchParams.get("page") || "1");
   const limit      = parseInt(searchParams.get("limit") || "20");
 
@@ -23,8 +22,8 @@ export async function GET(request: Request) {
 
   if (examBoard || level) {
     where.subject = {
-      ...(examBoard ? { examBoard } : {}),
-      ...(level    ? { level }     : {}),
+      ...(examBoard ? { examBoard: examBoard } : {}),
+      ...(level    ? { level: level }         : {}),
     };
   }
 

@@ -1,4 +1,8 @@
-import { PrismaClient, ExamBoard, Level, Difficulty } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+
+const ExamBoard = { CAMBRIDGE: "CAMBRIDGE", EDEXCEL: "EDEXCEL", AQA: "AQA", OCR: "OCR", IB: "IB" } as const;
+const Level     = { IGCSE: "IGCSE", A_LEVEL: "A_LEVEL", IB_SL: "IB_SL", IB_HL: "IB_HL" } as const;
+const Difficulty = { EASY: "EASY", MEDIUM: "MEDIUM", HARD: "HARD" } as const;
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();

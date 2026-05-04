@@ -51,13 +51,13 @@ export function AIMarker({ questionId, questionMarks, isPro, previousAnswer, pre
   return (
     <div className="p-6">
       {/* Tabs */}
-      <div className="flex gap-1 mb-6 bg-gray-100 rounded-xl p-1 border border-gray-200 w-fit">
+      <div className="flex gap-1 mb-6 rounded-xl p-1 border border-white/10 w-fit" style={{ background: "rgba(255,255,255,0.02)" }}>
         {(["answer", "result"] as const).filter((t) => t === "answer" || result).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              tab === t ? "bg-orange-50 text-orange-700" : "text-gray-500 hover:text-gray-600"
+              tab === t ? "bg-emerald-500/10 text-emerald-400" : "text-white/40 hover:text-white/60"
             }`}
           >
             {t === "answer" ? "Your answer" : "AI feedback"}
@@ -72,15 +72,20 @@ export function AIMarker({ questionId, questionMarks, isPro, previousAnswer, pre
             onChange={(e) => setAnswer(e.target.value)}
             placeholder={`Write your answer here...\n\nAim for ${questionMarks} point${questionMarks !== 1 ? "s" : ""} — one per mark.`}
             rows={8}
-            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-4 text-sm text-gray-900 placeholder:text-gray-300 focus:outline-none focus:border-orange-500/40 focus:bg-gray-100 transition-all resize-none leading-relaxed"
+            className="w-full border rounded-xl px-5 py-4 text-sm focus:outline-none focus:border-emerald-500/40 transition-all resize-none leading-relaxed"
+            style={{
+              background: "rgba(255,255,255,0.02)",
+              borderColor: "rgba(255,255,255,0.1)",
+              color: "#fff",
+            }}
           />
           <div className="flex items-center justify-between">
-            <span className="text-xs text-gray-300 font-mono">
+            <span className="text-xs font-mono" style={{ color: "rgba(255,255,255,0.3)" }}>
               {answer.trim() ? `${answer.split(/\s+/).filter(Boolean).length} words` : ""}
             </span>
             <div className="flex items-center gap-3">
               {result && (
-                <button onClick={() => setTab("result")} className="text-sm text-gray-500 hover:text-gray-600 transition-colors">
+                <button onClick={() => setTab("result")} className="text-sm transition-colors hover:text-white" style={{ color: "rgba(255,255,255,0.4)" }}>
                   View last result
                 </button>
               )}
@@ -102,18 +107,18 @@ export function AIMarker({ questionId, questionMarks, isPro, previousAnswer, pre
             <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-5 py-4">
               <p className="text-sm text-red-400 mb-1">{error.message}</p>
               {error.upgradeRequired && (
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="text-xs mt-2" style={{ color: "rgba(255,255,255,0.4)" }}>
                   Free tier: 5 markings/day.{" "}
-                  <Link href="/billing" className="text-orange-600 hover:underline inline-flex items-center gap-1">Upgrade to Pro <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg></Link>
+                  <Link href="/billing" className="text-emerald-400 hover:text-emerald-300 hover:underline inline-flex items-center gap-1">Upgrade to Pro <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg></Link>
                 </p>
               )}
             </div>
           )}
 
           {!isPro && (
-            <p className="text-xs text-gray-300 text-center">
+            <p className="text-xs text-center" style={{ color: "rgba(255,255,255,0.3)" }}>
               Free tier · 5 AI markings/day ·{" "}
-              <Link href="/billing" className="text-orange-600 hover:underline">Upgrade for unlimited</Link>
+              <Link href="/billing" className="text-emerald-400 hover:text-emerald-300 hover:underline">Upgrade for unlimited</Link>
             </p>
           )}
         </div>
@@ -138,7 +143,7 @@ export function AIMarker({ questionId, questionMarks, isPro, previousAnswer, pre
           </div>
 
           {/* Bar */}
-          <div className="h-2 rounded-full bg-gray-100">
+          <div className="h-2 rounded-full" style={{ background: "rgba(255,255,255,0.1)" }}>
             <div
               className={`h-full rounded-full bg-gradient-to-r ${g.bar} transition-all duration-700`}
               style={{ width: `${result.percentage}%` }}
@@ -169,30 +174,30 @@ export function AIMarker({ questionId, questionMarks, isPro, previousAnswer, pre
           </div>
 
           {/* Examiner tip */}
-          <div className="glass rounded-xl p-4 border border-orange-200 bg-orange-500/[0.08]">
+          <div className="glass rounded-xl p-4 border border-emerald-500/20 bg-emerald-500/[0.06]">
             <div className="flex items-center gap-1.5 mb-2">
-              <svg className="w-3.5 h-3.5 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <svg className="w-3.5 h-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
               </svg>
-              <span className="text-[10px] font-mono text-orange-600 uppercase tracking-widest">Examiner&apos;s tip</span>
+              <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest">Examiner&apos;s tip</span>
             </div>
-            <p className="text-sm text-gray-500 leading-relaxed">{result.examinerTip}</p>
+            <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>{result.examinerTip}</p>
           </div>
 
           {/* Model answer */}
           <details className="group">
-            <summary className="cursor-pointer text-xs text-gray-400 font-mono uppercase tracking-widest hover:text-gray-500 transition-colors list-none flex items-center gap-2">
+            <summary className="cursor-pointer text-xs font-mono uppercase tracking-widest transition-colors list-none flex items-center gap-2 hover:text-white" style={{ color: "rgba(255,255,255,0.4)" }}>
               <svg className="w-3 h-3 transition-transform group-open:rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
               </svg>
               Model answer (full marks)
             </summary>
-            <div className="mt-3 glass rounded-xl p-4 border border-gray-200 animate-slide-down">
-              <p className="text-sm text-gray-500 leading-relaxed whitespace-pre-wrap">{result.improvedAnswer}</p>
+            <div className="mt-3 glass rounded-xl p-4 border" style={{ borderColor: "rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.02)" }}>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap" style={{ color: "rgba(255,255,255,0.6)" }}>{result.improvedAnswer}</p>
             </div>
           </details>
 
-          <button onClick={() => { setTab("answer"); setResult(null); setAnswer(""); }} className="text-sm text-gray-400 hover:text-gray-500 transition-colors inline-flex items-center gap-1">
+          <button onClick={() => { setTab("answer"); setResult(null); setAnswer(""); }} className="text-sm transition-colors inline-flex items-center gap-1 hover:text-white" style={{ color: "rgba(255,255,255,0.4)" }}>
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
             Try again
           </button>

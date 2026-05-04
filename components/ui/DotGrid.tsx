@@ -20,7 +20,7 @@ export function DotGrid() {
       {/* Base dots */}
       <div className="fixed inset-0 pointer-events-none" style={{
         backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.18) 1px, transparent 1px)",
-        backgroundSize: "28px 28px",
+        backgroundSize: "14px 14px",
       }} />
       {/* Glow layer — brighter dots revealed under mouse */}
       <div
@@ -28,7 +28,7 @@ export function DotGrid() {
         className="fixed inset-0 pointer-events-none"
         style={{
           backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.75) 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
+          backgroundSize: "14px 14px",
           WebkitMaskImage: "radial-gradient(circle 180px at var(--x, -999px) var(--y, -999px), black 0%, transparent 100%)",
           maskImage: "radial-gradient(circle 180px at var(--x, -999px) var(--y, -999px), black 0%, transparent 100%)",
         } as React.CSSProperties}

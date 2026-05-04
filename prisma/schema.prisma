@@ -85,25 +85,10 @@ model Subject {
   examBoard   String
   level       String
   color       String    @default("#D97706")
-  courseGroup String    @default("Other")
 
-  questions     Question[]
-  topics        Topic[]
-  flashcards    Flashcard[]
-  revisionNotes RevisionNote[]
-}
-
-model RevisionNote {
-  id        String   @id @default(cuid())
-  title     String
-  content   String   
-  order     Int      @default(0)
-  subjectId String
-
-  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  questions  Question[]
+  topics     Topic[]
+  flashcards Flashcard[]
 }
 
 

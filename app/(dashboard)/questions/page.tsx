@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db";
+import { getSubjects, getTopics } from "@/lib/queries";
 import { QuestionList } from "@/components/questions/QuestionList";
 import type { Metadata } from "next";
 
@@ -18,7 +19,7 @@ export default async function QuestionsPage({
   if (searchParams.difficulty) where.difficulty = searchParams.difficulty;
   if (searchParams.year)       where.year       = parseInt(searchParams.year);
 
-  const [questions, total, subjects, topics] = await Promise.all([
+  const [questions, total, subjects, topics, yearsRaw] = await Promise.all([
     prisma.question.findMany({
       where,
       include: {
@@ -31,16 +32,12 @@ export default async function QuestionsPage({
       take: limit,
     }),
     prisma.question.count({ where }),
-    prisma.subject.findMany({ orderBy: { name: "asc" } }),
-    prisma.topic.findMany({
-      where: searchParams.subject ? { subjectId: searchParams.subject } : {},
-      orderBy: { name: "asc" },
-    }),
+    getSubjects(),
+    getTopics(searchParams.subject),
+    prisma.question.findMany({ select: { year: true }, distinct: ["year"], orderBy: { year: "desc" } }),
   ]);
 
-  const years = await prisma.question
-    .findMany({ select: { year: true }, distinct: ["year"], orderBy: { year: "desc" } })
-    .then((r) => r.map((q) => q.year));
+  const years = yearsRaw.map((q) => q.year);
 
   return (
     <div className="max-w-7xl mx-auto">

@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { getTotalQuestions } from "@/lib/queries";
 import Link from "next/link";
 import { DashboardCharts } from "@/components/dashboard/DashboardCharts";
 import type { Metadata } from "next";
@@ -23,7 +24,7 @@ async function getDashboardData(userId: string) {
       orderBy: { createdAt: "desc" },
       take: 6,
     }),
-    prisma.question.count(),
+    getTotalQuestions(),
   ]);
 
   const scored = allAttempts.filter((a) => a.aiScore !== null && a.aiMaxScore !== null);

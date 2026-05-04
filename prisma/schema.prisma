@@ -82,16 +82,31 @@ enum Tier {
 // ─── Content ────────────────────────────────────────────────────────────────
 
 model Subject {
-  id        String    @id @default(cuid())
-  name      String
-  code      String    @unique
-  examBoard ExamBoard
-  level     Level
-  color     String    @default("#D97706")
+  id          String    @id @default(cuid())
+  name        String
+  code        String    @unique
+  examBoard   ExamBoard
+  level       Level
+  color       String    @default("#D97706")
+  courseGroup String    @default("Other")
 
-  questions  Question[]
-  topics     Topic[]
-  flashcards Flashcard[]
+  questions     Question[]
+  topics        Topic[]
+  flashcards    Flashcard[]
+  revisionNotes RevisionNote[]
+}
+
+model RevisionNote {
+  id        String   @id @default(cuid())
+  title     String
+  content   String   @db.Text
+  order     Int      @default(0)
+  subjectId String
+
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum ExamBoard {

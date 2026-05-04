@@ -82,10 +82,10 @@ async function getDashboardData(userId: string) {
 }
 
 const STAT_ACCENTS = [
-  { icon: "📚", grad: "from-blue-500 to-indigo-500", glow: "rgba(99,102,241,0.18)", ring: "rgba(99,102,241,0.25)" },
-  { icon: "🎯", grad: "from-green-600 to-emerald-400", glow: "rgba(22,163,74,0.18)", ring: "rgba(22,163,74,0.25)" },
-  { icon: "⚡", grad: "from-teal-500 to-cyan-400", glow: "rgba(20,184,166,0.18)", ring: "rgba(20,184,166,0.25)" },
-  { icon: "🔥", grad: "from-rose-500 to-pink-400", glow: "rgba(244,63,94,0.18)", ring: "rgba(244,63,94,0.25)" },
+  { icon: <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>, grad: "from-blue-500 to-indigo-500", glow: "rgba(99,102,241,0.18)", ring: "rgba(99,102,241,0.25)" },
+  { icon: <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 1120.25 10.5M8.288 14.212A5.25 5.25 0 1117.25 10.5" /></svg>, grad: "from-green-600 to-emerald-400", glow: "rgba(22,163,74,0.18)", ring: "rgba(22,163,74,0.25)" },
+  { icon: <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" /></svg>, grad: "from-teal-500 to-cyan-400", glow: "rgba(20,184,166,0.18)", ring: "rgba(20,184,166,0.25)" },
+  { icon: <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" /><path strokeLinecap="round" strokeLinejoin="round" d="M12 18a3.75 3.75 0 00.495-7.467 5.99 5.99 0 00-1.925 3.546 5.974 5.974 0 01-2.133-1A3.75 3.75 0 0012 18z" /></svg>, grad: "from-rose-500 to-pink-400", glow: "rgba(244,63,94,0.18)", ring: "rgba(244,63,94,0.25)" },
 ];
 
 export default async function DashboardPage() {
@@ -187,8 +187,9 @@ export default async function DashboardPage() {
             <div className="h-40 flex items-center justify-center">
               <div className="text-center">
                 <div className="text-sm mb-3" style={{ color: "rgba(240,253,244,0.38)" }}>No attempts yet</div>
-                <Link href="/questions" className="text-sm hover:underline font-medium text-white">
-                  Start with a question →
+                <Link href="/questions" className="text-sm hover:underline font-medium text-white inline-flex items-center gap-1">
+                  Start with a question
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
               </div>
             </div>
@@ -240,8 +241,9 @@ export default async function DashboardPage() {
               <h2 className="font-semibold text-white text-sm">Recent attempts</h2>
               <p className="text-xs mt-0.5" style={{ color: "rgba(240,253,244,0.38)" }}>Your latest practice sessions</p>
             </div>
-            <Link href="/questions" className="text-xs font-medium transition-colors text-white/40 hover:text-white">
-              All questions →
+            <Link href="/questions" className="text-xs font-medium transition-colors text-white/40 hover:text-white inline-flex items-center gap-1">
+              All questions
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </Link>
           </div>
           <div>
@@ -301,7 +303,14 @@ export default async function DashboardPage() {
       {data.totalAttempts === 0 && (
         <div className="card p-12 text-center relative overflow-hidden animate-enter-6">
           <div className="relative">
-            <div className="text-4xl mb-4">🚀</div>
+            <div className="text-white/60 mb-4 flex justify-center">
+              <svg className="w-10 h-10 text-indigo-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
+                <path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
+                <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
+                <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
+              </svg>
+            </div>
             <div className="font-display text-2xl text-white mb-2 font-bold">Ready to start?</div>
             <p className="mb-7 text-sm max-w-sm mx-auto leading-relaxed" style={{ color: "rgba(240,253,244,0.45)" }}>
               Browse the question bank, attempt a question, and get instant AI marking against the official mark scheme.

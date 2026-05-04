@@ -104,7 +104,7 @@ export function AIMarker({ questionId, questionMarks, isPro, previousAnswer, pre
               {error.upgradeRequired && (
                 <p className="text-xs text-gray-500 mt-2">
                   Free tier: 5 markings/day.{" "}
-                  <Link href="/billing" className="text-orange-600 hover:underline">Upgrade to Pro →</Link>
+                  <Link href="/billing" className="text-orange-600 hover:underline inline-flex items-center gap-1">Upgrade to Pro <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg></Link>
                 </p>
               )}
             </div>
@@ -192,8 +192,9 @@ export function AIMarker({ questionId, questionMarks, isPro, previousAnswer, pre
             </div>
           </details>
 
-          <button onClick={() => { setTab("answer"); setResult(null); setAnswer(""); }} className="text-sm text-gray-400 hover:text-gray-500 transition-colors">
-            ← Try again
+          <button onClick={() => { setTab("answer"); setResult(null); setAnswer(""); }} className="text-sm text-gray-400 hover:text-gray-500 transition-colors inline-flex items-center gap-1">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
+            Try again
           </button>
         </div>
       )}

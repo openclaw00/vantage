@@ -66,8 +66,12 @@ export default function BillingPage() {
             "Progress tracking",
           ]).map((f) => (
             <li key={f} className="flex items-center gap-2.5 text-sm text-gray-400">
-              <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] shrink-0 ${isPro ? "bg-green-500/20 text-green-500" : "bg-white/10 text-gray-500"}`}>
-                {isPro ? "✓" : "—"}
+              <span className={`w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${isPro ? "bg-green-500/20 text-green-500" : "bg-white/10 text-gray-500"}`}>
+                {isPro ? (
+                  <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                ) : (
+                  <svg className="w-2.5 h-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" /></svg>
+                )}
               </span>
               {f}
             </li>
@@ -75,8 +79,9 @@ export default function BillingPage() {
         </ul>
 
         {isPro && (
-          <button className="text-sm text-gray-500 hover:text-gray-300 transition-colors font-mono">
-            Manage subscription →
+          <button className="text-sm text-gray-500 hover:text-gray-300 transition-colors font-mono inline-flex items-center gap-1">
+            Manage subscription
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
           </button>
         )}
       </div>
@@ -106,7 +111,9 @@ export default function BillingPage() {
                 "Timed mock exams",
               ].map((f) => (
                 <li key={f} className="flex items-center gap-2.5 text-sm text-gray-300">
-                  <span className="w-4 h-4 rounded-full bg-green-500/25 flex items-center justify-center text-[9px] text-green-500 shrink-0">✓</span>
+                  <span className="w-4 h-4 rounded-full bg-green-500/25 flex items-center justify-center shrink-0">
+                    <svg className="w-2.5 h-2.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                  </span>
                   {f}
                 </li>
               ))}
@@ -120,7 +127,7 @@ export default function BillingPage() {
               {upgradeLoading ? (
                 <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Processing...</>
               ) : (
-                <>Start 7-day free trial → then £9/month</>
+                <>Start 7-day free trial <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg> then £9/month</>
               )}
             </button>
             <p className="text-xs text-center text-gray-500 mt-3 font-mono">
@@ -131,8 +138,9 @@ export default function BillingPage() {
       )}
 
       <div className="text-center pt-2">
-        <Link href="/dashboard" className="text-xs text-gray-500 hover:text-gray-300 transition-colors font-mono">
-          ← Back to dashboard
+        <Link href="/dashboard" className="text-xs text-gray-500 hover:text-gray-300 transition-colors font-mono inline-flex items-center gap-1">
+          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
+          Back to dashboard
         </Link>
       </div>
     </div>

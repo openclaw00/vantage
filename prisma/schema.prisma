@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
+  provider = "sqlite"
   url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  
 }
 
 // ─── Auth (NextAuth) ────────────────────────────────────────────────────────
@@ -16,12 +16,12 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String? 
+  access_token      String? 
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String? 
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -55,7 +55,7 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
-  tier          Tier      @default(FREE)
+  tier          String      @default("FREE")
 
   stripeCustomerId       String?   @unique
   stripeSubscriptionId   String?   @unique
@@ -74,10 +74,7 @@ model User {
   progress FlashcardProgress[]
 }
 
-enum Tier {
-  FREE
-  PRO
-}
+
 
 // ─── Content ────────────────────────────────────────────────────────────────
 
@@ -85,8 +82,8 @@ model Subject {
   id          String    @id @default(cuid())
   name        String
   code        String    @unique
-  examBoard   ExamBoard
-  level       Level
+  examBoard   String
+  level       String
   color       String    @default("#D97706")
   courseGroup String    @default("Other")
 
@@ -99,7 +96,7 @@ model Subject {
 model RevisionNote {
   id        String   @id @default(cuid())
   title     String
-  content   String   @db.Text
+  content   String   
   order     Int      @default(0)
   subjectId String
 
@@ -109,20 +106,9 @@ model RevisionNote {
   updatedAt DateTime @updatedAt
 }
 
-enum ExamBoard {
-  CAMBRIDGE
-  EDEXCEL
-  AQA
-  OCR
-  IB
-}
 
-enum Level {
-  IGCSE
-  A_LEVEL
-  IB_SL
-  IB_HL
-}
+
+
 
 model Topic {
   id        String @id @default(cuid())
@@ -140,11 +126,11 @@ model Question {
   paper          String?
   questionNumber String
   marks          Int
-  difficulty     Difficulty
-  content        String     @db.Text
+  difficulty     String
+  content        String     
   imageUrl       String?
-  markScheme     String     @db.Text
-  examinerTip    String?    @db.Text
+  markScheme     String     
+  examinerTip    String?    
   subjectId      String
   topicId        String?
 
@@ -155,20 +141,16 @@ model Question {
   createdAt DateTime @default(now())
 }
 
-enum Difficulty {
-  EASY
-  MEDIUM
-  HARD
-}
+
 
 model QuestionAttempt {
   id         String   @id @default(cuid())
   userId     String
   questionId String
-  answer     String   @db.Text
+  answer     String   
   aiScore    Int?
   aiMaxScore Int?
-  aiFeedback String?  @db.Text
+  aiFeedback String?  
   timeTaken  Int?
   createdAt  DateTime @default(now())
 
@@ -180,8 +162,8 @@ model QuestionAttempt {
 
 model Flashcard {
   id        String  @id @default(cuid())
-  front     String  @db.Text
-  back      String  @db.Text
+  front     String  
+  back      String  
   subjectId String
   topicId   String?
 

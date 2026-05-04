@@ -170,12 +170,13 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
         {(filters.subject || filters.topic || filters.difficulty || filters.year) && (
           <button
             onClick={() => router.push(pathname)}
-            className="text-xs transition-colors"
+            className="text-xs transition-colors inline-flex items-center gap-1"
             style={{ color: "rgba(240,253,244,0.3)" }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#4ade80"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "rgba(240,253,244,0.3)"; }}
           >
-            ✕ Clear all filters
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            Clear all filters
           </button>
         )}
       </aside>
@@ -296,7 +297,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                     background: "rgba(255,255,255,0.04)",
                   }}
                 >
-                  ← Previous
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
+                  Previous
                 </Link>
               )}
               {page < totalPages && (
@@ -311,7 +313,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                     background: "rgba(255,255,255,0.04)",
                   }}
                 >
-                  Next →
+                  Next
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                 </Link>
               )}
             </div>

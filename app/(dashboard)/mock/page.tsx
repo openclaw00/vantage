@@ -7,7 +7,7 @@ export default function MockPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="font-serif text-4xl text-[var(--color-text)]">Mock Exams</h1>
+        <h1 className="font-display text-4xl text-[var(--color-text)]">Mock Exams</h1>
         <p className="text-[var(--color-text-muted)] mt-1 text-sm">
           Timed mock exam mode — coming soon.
         </p>
@@ -19,7 +19,7 @@ export default function MockPage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h2 className="font-serif text-2xl text-[var(--color-text)] mb-3">
+        <h2 className="font-display text-2xl text-[var(--color-text)] mb-3">
           Timed mock exams are coming.
         </h2>
         <p className="text-[var(--color-text-muted)] text-sm max-w-sm mx-auto mb-6">

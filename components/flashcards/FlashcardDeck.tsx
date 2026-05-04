@@ -48,7 +48,7 @@ export function FlashcardDeck({ flashcards }: Props) {
   if (allDone || (isLast && done.has(index))) {
     return (
       <div className="card p-12 text-center">
-        <div className="font-serif text-3xl text-[var(--color-text)] mb-3">
+        <div className="font-display text-3xl text-[var(--color-text)] mb-3">
           Session complete!
         </div>
         <p className="text-[var(--color-text-muted)] text-sm mb-6">

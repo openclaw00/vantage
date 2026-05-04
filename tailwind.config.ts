@@ -10,33 +10,29 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ["var(--font-display)", "system-ui", "sans-serif"],
-        sans:    ["var(--font-sans)", "system-ui", "sans-serif"],
-        mono:    ["var(--font-mono)", "Menlo", "monospace"],
+        display: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        sans:    ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        mono:    ["var(--font-geist-mono)", "Menlo", "monospace"],
       },
       colors: {
-        bg:      "#07070f",
-        surface: "rgba(255,255,255,0.04)",
-        violet: {
-          DEFAULT: "#8b5cf6",
-          bright:  "#a78bfa",
-          dim:     "#6d28d9",
-          glow:    "rgba(139,92,246,0.15)",
-        },
-        indigo: {
-          DEFAULT: "#6366f1",
-          bright:  "#818cf8",
+        bg:      "#f5f4f0",
+        surface: "rgba(0,0,0,0.03)",
+        orange: {
+          DEFAULT: "#f97316",
+          bright:  "#fb923c",
+          dim:     "#ea580c",
+          glow:    "rgba(249,115,22,0.15)",
         },
         glass: {
-          DEFAULT: "rgba(255,255,255,0.06)",
-          border:  "rgba(255,255,255,0.09)",
-          hover:   "rgba(255,255,255,0.09)",
+          DEFAULT: "rgba(255,255,255,0.82)",
+          border:  "rgba(0,0,0,0.07)",
+          hover:   "rgba(255,255,255,0.94)",
         },
       },
       backgroundImage: {
-        "gradient-violet": "linear-gradient(135deg, #7c3aed 0%, #6366f1 100%)",
-        "gradient-text":   "linear-gradient(135deg, #a78bfa 0%, #818cf8 100%)",
-        "glow-violet":     "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139,92,246,0.18) 0%, transparent 70%)",
+        "gradient-orange": "linear-gradient(135deg, #ea580c 0%, #f97316 100%)",
+        "gradient-text":   "linear-gradient(135deg, #ea580c 0%, #f97316 50%, #fb923c 100%)",
+        "glow-orange":     "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(249,115,22,0.14) 0%, transparent 70%)",
         "noise":           "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
       },
       animation: {
@@ -57,10 +53,10 @@ const config: Config = {
         glowPulse: { "0%,100%": { opacity: "0.6" }, "50%": { opacity: "1" } },
       },
       boxShadow: {
-        glass:  "0 0 0 1px rgba(255,255,255,0.08), 0 4px 32px rgba(0,0,0,0.4)",
-        violet: "0 0 40px rgba(139,92,246,0.25), 0 0 80px rgba(99,102,241,0.1)",
-        card:   "0 1px 0 0 rgba(255,255,255,0.06) inset, 0 4px 24px rgba(0,0,0,0.5)",
-        cta:    "0 0 0 1px rgba(139,92,246,0.5), 0 4px 20px rgba(139,92,246,0.3)",
+        glass:  "0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.06)",
+        orange: "0 0 40px rgba(249,115,22,0.18), 0 0 80px rgba(234,88,12,0.08)",
+        card:   "0 1px 4px rgba(0,0,0,0.07), 0 0 0 1px rgba(0,0,0,0.05)",
+        cta:    "0 0 0 1px rgba(249,115,22,0.4), 0 4px 16px rgba(249,115,22,0.22)",
       },
       backdropBlur: { xs: "4px" },
     },

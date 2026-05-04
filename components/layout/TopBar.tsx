@@ -23,22 +23,28 @@ export function TopBar({ user }: TopBarProps) {
   const active = navItems.find((n) => pathname === n.href || pathname.startsWith(n.href + "/"));
 
   return (
-    <header className="h-16 border-b border-white/[0.06] flex items-center justify-between px-6 bg-white/[0.01] backdrop-blur-sm">
+    <header
+      className="h-14 flex items-center justify-between px-6 shrink-0 sticky top-0 z-20"
+      style={{
+        background: "rgba(13,13,13,0.9)",
+        borderBottom: "1px solid rgba(255,255,255,0.07)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+      }}
+    >
       {/* Mobile logo */}
       <div className="md:hidden flex items-center gap-2">
-        <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center">
-          <span className="text-white font-bold text-[10px]">V</span>
-        </div>
-        <span className="font-display font-semibold text-sm">Vantage</span>
+        <img src="/logo.png" alt="Leaply" className="w-6 h-6 object-contain" />
+        <span className="font-bold text-sm tracking-tight text-white">Leaply</span>
       </div>
 
       {/* Desktop breadcrumb */}
       <div className="hidden md:flex items-center gap-2 text-sm">
-        <span className="text-white/30">Vantage</span>
+        <span className="text-xs" style={{ color: "rgba(255,255,255,0.28)" }}>Leaply</span>
         {active && (
           <>
-            <span className="text-white/15">/</span>
-            <span className="text-white/60 font-medium">{active.label}</span>
+            <span style={{ color: "rgba(255,255,255,0.2)" }}>/</span>
+            <span className="font-medium" style={{ color: "rgba(255,255,255,0.75)" }}>{active.label}</span>
           </>
         )}
       </div>
@@ -48,7 +54,8 @@ export function TopBar({ user }: TopBarProps) {
         {user.tier === "FREE" && (
           <Link
             href="/billing"
-            className="hidden sm:flex items-center gap-1.5 text-xs border border-violet-500/30 text-violet-400 px-3 py-1.5 rounded-lg hover:bg-violet-500/10 transition-colors font-medium"
+            className="hidden sm:flex items-center gap-1.5 text-xs text-black px-3 py-1.5 rounded-lg font-semibold transition-opacity hover:opacity-85"
+            style={{ background: "#fff" }}
           >
             ✦ Upgrade
           </Link>
@@ -56,7 +63,7 @@ export function TopBar({ user }: TopBarProps) {
 
         {/* Mobile menu */}
         <div className="md:hidden relative">
-          <button onClick={() => setMenuOpen(!menuOpen)} className="p-2 text-white/40 hover:text-white/70 transition-colors">
+          <button onClick={() => setMenuOpen(!menuOpen)} className="p-2 transition-colors" style={{ color: "rgba(255,255,255,0.5)" }}>
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               {menuOpen
                 ? <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -65,23 +72,27 @@ export function TopBar({ user }: TopBarProps) {
           </button>
 
           {menuOpen && (
-            <div className="absolute right-0 top-full mt-2 w-44 glass rounded-xl border border-white/10 shadow-glass py-1 z-50 animate-slide-down">
+            <div className="absolute right-0 top-full mt-2 w-44 rounded-xl py-1 z-50" style={{
+              background: "#1a1a1a",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+            }}>
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setMenuOpen(false)}
-                  className={`block px-4 py-2.5 text-sm transition-colors ${
-                    pathname.startsWith(item.href) ? "text-violet-400" : "text-white/50 hover:text-white"
-                  }`}
+                  className="block px-4 py-2.5 text-sm transition-colors hover:bg-white/5"
+                  style={{ color: pathname.startsWith(item.href) ? "#fff" : "rgba(255,255,255,0.5)" }}
                 >
                   {item.label}
                 </Link>
               ))}
-              <div className="border-t border-white/[0.06] my-1" />
+              <div className="my-1" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }} />
               <button
                 onClick={() => signOut({ callbackUrl: "/" })}
-                className="w-full text-left px-4 py-2.5 text-sm text-white/40 hover:text-white/60"
+                className="w-full text-left px-4 py-2.5 text-sm transition-colors hover:bg-white/5"
+                style={{ color: "rgba(255,255,255,0.4)" }}
               >
                 Sign out
               </button>

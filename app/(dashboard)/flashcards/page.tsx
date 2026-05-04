@@ -23,7 +23,7 @@ export default async function FlashcardsPage() {
   return (
     <div className="max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="font-serif text-4xl text-[var(--color-text)]">Flashcards</h1>
+        <h1 className="font-display text-4xl text-[var(--color-text)]">Flashcards</h1>
         <p className="text-[var(--color-text-muted)] mt-1 text-sm">
           {flashcards.length} cards · spaced repetition with SM-2 algorithm.
         </p>

@@ -22,7 +22,7 @@ export async function GET(
   return NextResponse.json({ ...safeQuestion, hasMarkScheme: true });
 }
 
-export async function GET_WITH_SCHEME(
+async function getWithScheme(
   _request: Request,
   { params }: { params: { id: string } }
 ) {

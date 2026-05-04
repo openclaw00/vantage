@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { DotGrid } from "@/components/ui/DotGrid";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function zodResolver(schema: z.ZodSchema<any>) {
@@ -47,34 +48,35 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07070f] flex items-center justify-center px-4 relative overflow-hidden">
-      {/* Orbs */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute w-[500px] h-[500px] top-[-150px] left-[50%] -translate-x-1/2 bg-violet-500/15 rounded-full" style={{ filter: "blur(100px)" }} />
-        <div className="absolute w-[300px] h-[300px] bottom-[-80px] right-[-60px] bg-indigo-500/10 rounded-full" style={{ filter: "blur(80px)" }} />
-      </div>
+    <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden" style={{ background: "#111111" }}>
+      <DotGrid />
 
       <div className="relative w-full max-w-sm">
-        {/* Logo */}
         <Link href="/" className="flex items-center gap-2 mb-10 justify-center">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-500 flex items-center justify-center">
-            <span className="text-white font-bold text-sm">V</span>
-          </div>
-          <span className="font-display font-semibold text-lg">Vantage</span>
+          <img src="/logo.png" alt="Leaply" className="w-8 h-8 object-contain" />
+          <span className="font-bold text-lg text-white">Leaply</span>
         </Link>
 
-        <div className="glass rounded-2xl p-8 border border-white/[0.08] shadow-glass">
-          <h1 className="font-display font-bold text-2xl mb-1">Welcome back</h1>
-          <p className="text-sm text-white/40 mb-7">
+        <div className="rounded-2xl p-8" style={{
+          background: "rgba(255,255,255,0.04)",
+          border: "1px solid rgba(255,255,255,0.1)",
+        }}>
+          <h1 className="font-bold text-2xl mb-1 text-white">Welcome back</h1>
+          <p className="text-sm mb-7" style={{ color: "rgba(255,255,255,0.45)" }}>
             No account?{" "}
-            <Link href="/register" className="text-violet-400 hover:text-violet-300 transition-colors">Sign up free</Link>
+            <Link href="/register" className="font-medium text-white underline underline-offset-2 transition-opacity hover:opacity-70">Sign up free</Link>
           </p>
 
           {/* Google */}
           <button
             onClick={async () => { setGoogleLoading(true); await signIn("google", { callbackUrl }); }}
             disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 bg-white/[0.06] border border-white/[0.09] rounded-xl py-2.5 text-sm font-medium text-white/70 hover:bg-white/[0.09] hover:text-white transition-all mb-5 disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-3 rounded-xl py-2.5 text-sm font-medium transition-all mb-5 disabled:opacity-50 hover:bg-white/5"
+            style={{
+              background: "rgba(255,255,255,0.06)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "rgba(255,255,255,0.75)",
+            }}
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -86,48 +88,67 @@ export default function LoginPage() {
           </button>
 
           <div className="flex items-center gap-3 mb-5">
-            <div className="flex-1 h-px bg-white/[0.06]" />
-            <span className="text-[11px] text-white/25 font-mono">OR</span>
-            <div className="flex-1 h-px bg-white/[0.06]" />
+            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
+            <span className="text-[11px] font-mono" style={{ color: "rgba(255,255,255,0.3)" }}>OR</span>
+            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.08)" }} />
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
-              <label className="block text-xs font-mono text-white/30 uppercase tracking-widest mb-1.5">Email</label>
+              <label className="block text-xs font-mono uppercase tracking-widest mb-1.5" style={{ color: "rgba(255,255,255,0.4)" }}>Email</label>
               <input
                 {...register("email")}
                 type="email"
                 autoComplete="email"
                 placeholder="you@school.edu"
-                className="w-full bg-white/[0.04] border border-white/[0.07] rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.06] transition-all"
+                className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none transition-all"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  color: "#fff",
+                }}
+                onFocus={(e) => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.3)"; }}
+                onBlur={(e) => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.1)"; }}
               />
               {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-mono text-white/30 uppercase tracking-widest mb-1.5">Password</label>
+              <label className="block text-xs font-mono uppercase tracking-widest mb-1.5" style={{ color: "rgba(255,255,255,0.4)" }}>Password</label>
               <input
                 {...register("password")}
                 type="password"
                 autoComplete="current-password"
                 placeholder="••••••••"
-                className="w-full bg-white/[0.04] border border-white/[0.07] rounded-xl px-4 py-2.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500/50 focus:bg-white/[0.06] transition-all"
+                className="w-full rounded-xl px-4 py-2.5 text-sm focus:outline-none transition-all"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  color: "#fff",
+                }}
+                onFocus={(e) => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.3)"; }}
+                onBlur={(e) => { e.currentTarget.style.border = "1px solid rgba(255,255,255,0.1)"; }}
               />
               {errors.password && <p className="text-xs text-red-400 mt-1">{errors.password.message}</p>}
             </div>
 
             {error && (
-              <div className="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 text-sm text-red-400">
+              <div className="rounded-xl px-4 py-3 text-sm text-red-400" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)" }}>
                 {error}
               </div>
             )}
 
-            <button type="submit" disabled={loading} className="btn-primary w-full py-3 rounded-xl mt-1 disabled:opacity-50">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-xl mt-1 font-semibold text-sm text-black transition-opacity hover:opacity-90 disabled:opacity-50"
+              style={{ background: "#fff" }}
+            >
               {loading ? "Signing in..." : "Sign in"}
             </button>
           </form>
 
-          <p className="text-[11px] text-white/20 text-center mt-5 font-mono">
-            Demo: demo@vantage.study / password123
+          <p className="text-[11px] text-center mt-5 font-mono" style={{ color: "rgba(255,255,255,0.25)" }}>
+            Demo: demo@leaply.app / password123
           </p>
         </div>
       </div>

@@ -1,58 +1,72 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+"use client";
+
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import type { Metadata } from "next";
+import { useState } from "react";
 
-export const metadata: Metadata = { title: "Billing" };
+export default function BillingPage() {
+  const { data: session } = useSession();
+  const isPro = session?.user?.tier === "PRO";
+  const [upgradeLoading, setUpgradeLoading] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
-export default async function BillingPage() {
-  const session = await getServerSession(authOptions);
-  const isPro = session?.user.tier === "PRO";
+  const handleUpgrade = async () => {
+    setUpgradeLoading(true);
+    await new Promise((r) => setTimeout(r, 800));
+    setUpgradeLoading(false);
+    setToast("Stripe integration coming soon — add STRIPE_SECRET_KEY and STRIPE_PRO_PRICE_ID to .env to enable payments.");
+    setTimeout(() => setToast(null), 6000);
+  };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-8">
-        <h1 className="font-serif text-4xl text-[var(--color-text)]">Billing</h1>
-        <p className="text-[var(--color-text-muted)] mt-1 text-sm">
-          Manage your subscription.
-        </p>
+    <div className="max-w-2xl mx-auto space-y-6 relative">
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 max-w-sm w-full px-4">
+          <div className="glass rounded-2xl px-5 py-4 border border-green-500/30 bg-green-500/10 text-sm text-gray-200 animate-slide-up">
+            {toast}
+          </div>
+        </div>
+      )}
+
+      <div>
+        <h1 className="font-display font-bold text-3xl text-white">Billing</h1>
+        <p className="text-gray-400 mt-1 text-sm">Manage your Leaply subscription.</p>
       </div>
 
-      {/* Current plan */}
-      <div className="card p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
+      {/* Current plan card */}
+      <div className="glass rounded-2xl p-6 border border-white/10">
+        <div className="flex items-center justify-between mb-5">
           <div>
-            <div className="font-mono text-xs text-[var(--color-text-muted)] mb-1">CURRENT PLAN</div>
-            <div className="font-serif text-2xl text-[var(--color-text)]">
-              {isPro ? "Pro" : "Free"}
-            </div>
+            <div className="font-mono text-[10px] text-gray-500 uppercase tracking-widest mb-1">Current plan</div>
+            <div className="font-display font-bold text-2xl text-white">{isPro ? "Pro" : "Free"}</div>
           </div>
-          <span
-            className={`font-mono text-xs px-3 py-1 rounded-full border ${
-              isPro
-                ? "border-[var(--color-amber)] text-[var(--color-amber)]"
-                : "border-[var(--color-border-2)] text-[var(--color-text-muted)]"
-            }`}
-          >
+          <span className={`font-mono text-xs px-3 py-1 rounded-full border ${
+            isPro
+              ? "border-green-500/40 text-green-500 bg-green-500/10"
+              : "border-white/10 text-gray-400"
+          }`}>
             {isPro ? "ACTIVE" : "FREE TIER"}
           </span>
         </div>
 
-        <ul className="space-y-2 mb-6">
-          {isPro ? [
+        <ul className="space-y-2.5 mb-6">
+          {(isPro ? [
             "Unlimited AI markings",
             "AI Explain This",
             "AI-generated practice questions",
             "Weak topic detector",
             "Timed mock exams",
+            "Priority support",
           ] : [
             "Full question bank access",
             "Mark scheme viewer",
             "5 AI markings per day",
             "Basic flashcards",
-          ].map((f) => (
-            <li key={f} className="flex items-center gap-2 text-sm text-[var(--color-text-muted)]">
-              <span className={isPro ? "text-green-400" : "text-[var(--color-amber)]"}>
+            "Progress tracking",
+          ]).map((f) => (
+            <li key={f} className="flex items-center gap-2.5 text-sm text-gray-400">
+              <span className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] shrink-0 ${isPro ? "bg-green-500/20 text-green-500" : "bg-white/10 text-gray-500"}`}>
                 {isPro ? "✓" : "—"}
               </span>
               {f}
@@ -60,41 +74,64 @@ export default async function BillingPage() {
           ))}
         </ul>
 
-        {!isPro && (
-          <div className="border-t border-[var(--color-border)] pt-5">
-            <div className="font-serif text-2xl text-[var(--color-text)] mb-1">
-              Upgrade to Pro — £9/month
-            </div>
-            <p className="text-sm text-[var(--color-text-muted)] mb-4">
-              Unlimited AI markings, weak topic detection, mock exam mode, and more.
-              Cancel any time.
-            </p>
-            <button
-              className="w-full bg-[var(--color-amber)] text-black py-3 rounded font-semibold text-sm hover:bg-[var(--color-amber-light)] transition-colors"
-              onClick={() => {
-                /* Stripe checkout would go here */
-                alert("Stripe integration: set STRIPE_SECRET_KEY and STRIPE_PRO_PRICE_ID in .env to enable payments.");
-              }}
-            >
-              Start 7-day free trial → then £9/month
-            </button>
-            <p className="text-xs text-center text-[var(--color-text-faint)] mt-3">
-              Powered by Stripe · Secure · Cancel anytime
-            </p>
-          </div>
-        )}
-
         {isPro && (
-          <div className="border-t border-[var(--color-border)] pt-5">
-            <button className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text)] transition-colors">
-              Manage subscription →
-            </button>
-          </div>
+          <button className="text-sm text-gray-500 hover:text-gray-300 transition-colors font-mono">
+            Manage subscription →
+          </button>
         )}
       </div>
 
-      <div className="text-center">
-        <Link href="/dashboard" className="text-xs text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors">
+      {/* Upgrade CTA */}
+      {!isPro && (
+        <div className="relative rounded-2xl p-8 border border-green-500/30 overflow-hidden glass">
+          <div className="absolute top-0 right-0 w-56 h-56 bg-green-500/5 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="relative">
+            <div className="font-mono text-[10px] text-green-500 uppercase tracking-widest mb-4">Upgrade to Pro</div>
+            <div className="flex items-baseline gap-1 mb-1">
+              <span className="font-display font-bold text-5xl text-white">£9</span>
+              <span className="text-gray-400 text-sm">/ month</span>
+            </div>
+            <p className="text-sm text-gray-400 mb-6">
+              Unlimited AI markings, weak topic detection, mock exam mode, and more. Cancel anytime.
+            </p>
+
+            <ul className="space-y-2.5 mb-8">
+              {[
+                "Everything in Free",
+                "Unlimited AI markings",
+                "AI Explain This",
+                "AI practice questions",
+                "Weak topic detector",
+                "Timed mock exams",
+              ].map((f) => (
+                <li key={f} className="flex items-center gap-2.5 text-sm text-gray-300">
+                  <span className="w-4 h-4 rounded-full bg-green-500/25 flex items-center justify-center text-[9px] text-green-500 shrink-0">✓</span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={handleUpgrade}
+              disabled={upgradeLoading}
+              className="btn-primary w-full py-3.5 rounded-xl text-[15px] inline-flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+            >
+              {upgradeLoading ? (
+                <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Processing...</>
+              ) : (
+                <>Start 7-day free trial → then £9/month</>
+              )}
+            </button>
+            <p className="text-xs text-center text-gray-500 mt-3 font-mono">
+              Powered by Stripe · Secure · Cancel anytime
+            </p>
+          </div>
+        </div>
+      )}
+
+      <div className="text-center pt-2">
+        <Link href="/dashboard" className="text-xs text-gray-500 hover:text-gray-300 transition-colors font-mono">
           ← Back to dashboard
         </Link>
       </div>

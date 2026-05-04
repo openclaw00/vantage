@@ -14,16 +14,12 @@ async function getDashboardData(userId: string) {
   const [allAttempts, recentAttempts, totalQuestions] = await Promise.all([
     prisma.questionAttempt.findMany({
       where: { userId },
-      include: {
-        question: { include: { subject: true, topic: true } },
-      },
+      include: { question: { include: { subject: true, topic: true } } },
       orderBy: { createdAt: "desc" },
     }),
     prisma.questionAttempt.findMany({
       where: { userId },
-      include: {
-        question: { include: { subject: true, topic: true } },
-      },
+      include: { question: { include: { subject: true, topic: true } } },
       orderBy: { createdAt: "desc" },
       take: 6,
     }),
@@ -38,7 +34,6 @@ async function getDashboardData(userId: string) {
 
   const today = allAttempts.filter((a) => a.createdAt >= todayStart).length;
 
-  // Topic performance
   const topicMap: Record<string, { name: string; subject: string; attempts: number; total: number }> = {};
   for (const a of allAttempts) {
     if (!a.question.topic) continue;
@@ -62,7 +57,6 @@ async function getDashboardData(userId: string) {
     }))
     .sort((a, b) => a.avgScore - b.avgScore);
 
-  // Score over time (last 30 days, one point per attempt)
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
   const scoreOverTime = scored
     .filter((a) => a.createdAt >= thirtyDaysAgo)
@@ -86,6 +80,13 @@ async function getDashboardData(userId: string) {
   };
 }
 
+const STAT_ACCENTS = [
+  { icon: "📚", grad: "from-blue-500 to-indigo-500", glow: "rgba(99,102,241,0.18)", ring: "rgba(99,102,241,0.25)" },
+  { icon: "🎯", grad: "from-green-600 to-emerald-400", glow: "rgba(22,163,74,0.18)", ring: "rgba(22,163,74,0.25)" },
+  { icon: "⚡", grad: "from-teal-500 to-cyan-400", glow: "rgba(20,184,166,0.18)", ring: "rgba(20,184,166,0.25)" },
+  { icon: "🔥", grad: "from-rose-500 to-pink-400", glow: "rgba(244,63,94,0.18)", ring: "rgba(244,63,94,0.25)" },
+];
+
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
   const data = await getDashboardData(session!.user.id);
@@ -96,36 +97,36 @@ export default async function DashboardPage() {
       label: "Questions attempted",
       value: data.totalAttempts,
       sub: `of ${data.totalQuestions} available`,
-      color: "text-white",
+      color: "text-indigo-600",
     },
     {
       label: "Average score",
       value: data.avgScore ? `${data.avgScore}%` : "—",
       sub: data.avgScore >= 70 ? "Good progress" : data.avgScore > 0 ? "Room to improve" : "No scored attempts yet",
-      color: data.avgScore >= 70 ? "text-green-400" : data.avgScore >= 50 ? "text-violet-300" : "text-white",
+      color: data.avgScore >= 70 ? "text-emerald-400" : data.avgScore >= 50 ? "text-yellow-400" : "text-white/40",
     },
     {
       label: "Questions today",
       value: data.questionsToday,
       sub: "keep the streak going",
-      color: "text-violet-300",
+      color: "text-emerald-600",
     },
     {
       label: "Weak topics",
       value: data.weakTopics.length,
       sub: data.weakTopics.length > 0 ? "need attention" : "great coverage!",
-      color: data.weakTopics.length > 0 ? "text-red-400" : "text-green-400",
+      color: data.weakTopics.length > 0 ? "text-rose-500" : "text-emerald-600",
     },
   ];
 
   return (
     <div className="max-w-6xl mx-auto space-y-8">
       {/* Header */}
-      <div>
-        <h1 className="font-display font-bold text-4xl text-white">
+      <div className="animate-enter-1">
+        <h1 className="font-bold text-4xl text-white tracking-tight">
           Good {getGreeting()}, {firstName}.
         </h1>
-        <p className="text-white/50 mt-1 text-sm">
+        <p className="mt-1.5 text-sm" style={{ color: "rgba(240,253,244,0.45)" }}>
           {data.totalAttempts === 0
             ? "Start by attempting a question from the question bank."
             : `You've attempted ${data.totalAttempts} question${data.totalAttempts !== 1 ? "s" : ""}${data.avgScore > 0 ? ` with an average score of ${data.avgScore}%` : ""}.`}
@@ -134,35 +135,58 @@ export default async function DashboardPage() {
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map((card) => (
-          <div key={card.label} className="glass rounded-2xl p-5 border border-white/[0.07]">
-            <div className="text-xs font-mono text-white/50 mb-2 uppercase tracking-wide">
-              {card.label}
+        {statCards.map((card, i) => {
+          const accent = STAT_ACCENTS[i];
+          return (
+            <div
+              key={card.label}
+              className={`stat-card p-5 animate-enter-${i + 2}`}
+            >
+              {/* Accent glow blob */}
+              <div
+                className="absolute -top-6 -right-6 w-24 h-24 rounded-full pointer-events-none"
+                style={{ background: `radial-gradient(circle, ${accent.glow} 0%, transparent 70%)`, filter: "blur(12px)" }}
+              />
+              {/* Icon badge */}
+              <div
+                className={`w-8 h-8 rounded-xl bg-gradient-to-br ${accent.grad} flex items-center justify-center mb-3 text-sm shadow-sm`}
+                style={{ boxShadow: `0 2px 10px ${accent.ring}` }}
+              >
+                {accent.icon}
+              </div>
+              <div className="text-[10px] font-mono mb-1.5 uppercase tracking-widest" style={{ color: "rgba(240,253,244,0.38)" }}>
+                {card.label}
+              </div>
+              <div className={`font-display font-bold text-3xl mb-1 ${card.color}`}>{card.value}</div>
+              <div className="text-xs" style={{ color: "rgba(240,253,244,0.38)" }}>{card.sub}</div>
             </div>
-            <div className={`font-display font-bold text-4xl mb-1 ${card.color}`}>{card.value}</div>
-            <div className="text-xs text-white/25">{card.sub}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Charts + weak topics row */}
+      {/* Charts + weak topics */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Score over time chart */}
-        <div className="lg:col-span-2 glass rounded-2xl p-6 border border-white/[0.07]">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="font-medium text-white">Score over time</h2>
-            <span className="font-mono text-xs text-white/50">LAST 30 DAYS</span>
+        {/* Score over time */}
+        <div className="lg:col-span-2 card p-6 animate-enter-6 relative overflow-hidden">
+          {/* Subtle gradient wash */}
+          <div className="relative flex items-center justify-between mb-6">
+            <div>
+              <h2 className="font-semibold text-white text-sm">Score over time</h2>
+              <p className="text-xs mt-0.5" style={{ color: "rgba(240,253,244,0.38)" }}>Your last 30 days of attempts</p>
+            </div>
+            <span className="font-mono text-[10px] px-2.5 py-1 rounded-full" style={{ color: "rgba(240,253,244,0.4)", background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}>
+              LAST 30 DAYS
+            </span>
           </div>
           {data.scoreOverTime.length > 0 ? (
-            <DashboardCharts data={data.scoreOverTime} />
+            <div className="relative">
+              <DashboardCharts data={data.scoreOverTime} />
+            </div>
           ) : (
             <div className="h-40 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-white/25 text-sm mb-3">No attempts yet</div>
-                <Link
-                  href="/questions"
-                  className="text-violet-400 text-sm hover:underline"
-                >
+                <div className="text-sm mb-3" style={{ color: "rgba(240,253,244,0.38)" }}>No attempts yet</div>
+                <Link href="/questions" className="text-sm hover:underline font-medium text-white">
                   Start with a question →
                 </Link>
               </div>
@@ -171,54 +195,56 @@ export default async function DashboardPage() {
         </div>
 
         {/* Weak topics */}
-        <div className="glass rounded-2xl p-6 border border-white/[0.07]">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="font-medium text-white">Weak topics</h2>
-            <span className="font-mono text-xs text-white/50">PRIORITY</span>
+        <div className="card p-6 animate-enter-6 relative overflow-hidden">
+          <div className="absolute inset-0 pointer-events-none rounded-[20px]" style={{ background: "linear-gradient(135deg, rgba(244,63,94,0.04) 0%, transparent 60%)" }} />
+          <div className="relative flex items-center justify-between mb-6">
+            <div>
+              <h2 className="font-semibold text-white text-sm">Weak topics</h2>
+              <p className="text-xs mt-0.5" style={{ color: "rgba(240,253,244,0.38)" }}>Focus areas for improvement</p>
+            </div>
+            <span className="font-mono text-[10px] text-rose-400 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-100">
+              PRIORITY
+            </span>
           </div>
           {data.weakTopics.length > 0 ? (
-            <div className="space-y-4">
-              {data.weakTopics.map((topic) => (
-                <div key={topic.id}>
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-white">{topic.name}</span>
-                    <span className="font-mono text-xs text-red-400">{topic.avgScore}%</span>
+            <div className="relative space-y-5">
+              {data.weakTopics.map((topic, idx) => (
+                <div key={topic.id} style={{ animationDelay: `${0.1 * idx}s` }}>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-sm text-white font-medium">{topic.name}</span>
+                    <span className="font-mono text-xs text-rose-500 font-semibold">{topic.avgScore}%</span>
                   </div>
                   <div className="score-bar">
-                    <div
-                      className="score-bar-fill bg-red-500"
-                      style={{ width: `${topic.avgScore}%` }}
-                    />
+                    <div className="score-bar-fill" style={{ width: `${topic.avgScore}%`, background: "linear-gradient(90deg, #dc2626, #ef4444)" }} />
                   </div>
-                  <div className="text-xs text-white/25 mt-0.5">
+                  <div className="text-[10px] mt-1 font-mono" style={{ color: "rgba(240,253,244,0.3)" }}>
                     {topic.subject} · {topic.attempts} attempt{topic.attempts !== 1 ? "s" : ""}
                   </div>
                 </div>
               ))}
             </div>
           ) : data.totalAttempts > 0 ? (
-            <div className="text-sm text-white/50">
-              Great work — no weak topics detected yet.
-            </div>
+            <div className="relative text-sm" style={{ color: "rgba(240,253,244,0.45)" }}>Great work — no weak topics detected yet.</div>
           ) : (
-            <div className="text-sm text-white/50">
-              Weak topics will appear here after you attempt questions.
-            </div>
+            <div className="relative text-sm" style={{ color: "rgba(240,253,244,0.45)" }}>Weak topics will appear here after you attempt questions.</div>
           )}
         </div>
       </div>
 
       {/* Recent attempts */}
       {data.recentAttempts.length > 0 && (
-        <div className="glass rounded-2xl border border-white/[0.07]">
-          <div className="flex items-center justify-between p-6 border-b border-white/[0.07]">
-            <h2 className="font-medium text-white">Recent attempts</h2>
-            <Link href="/questions" className="text-xs text-violet-400 hover:underline">
+        <div className="card overflow-hidden animate-enter-6">
+          <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <div>
+              <h2 className="font-semibold text-white text-sm">Recent attempts</h2>
+              <p className="text-xs mt-0.5" style={{ color: "rgba(240,253,244,0.38)" }}>Your latest practice sessions</p>
+            </div>
+            <Link href="/questions" className="text-xs font-medium transition-colors text-white/40 hover:text-white">
               All questions →
             </Link>
           </div>
-          <div className="divide-y divide-white/[0.07]">
-            {data.recentAttempts.map((attempt) => {
+          <div>
+            {data.recentAttempts.map((attempt, idx) => {
               const pct =
                 attempt.aiScore !== null && attempt.aiMaxScore !== null
                   ? Math.round((attempt.aiScore / attempt.aiMaxScore) * 100)
@@ -227,39 +253,40 @@ export default async function DashboardPage() {
                 <Link
                   key={attempt.id}
                   href={`/questions/${attempt.questionId}`}
-                  className="flex items-center gap-4 px-6 py-4 hover:bg-white/[0.04] transition-colors group"
+                  className="flex items-center gap-4 px-6 py-4 group transition-all duration-150"
+                  style={{ borderBottom: idx < data.recentAttempts.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none" }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.03)"; }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = ""; }}
                 >
+                  {/* Score ring */}
+                  {pct !== null && (
+                    <div
+                      className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold shrink-0`}
+                      style={{
+                        background: pct >= 70 ? "linear-gradient(135deg,#15803d,#22c55e)" : pct >= 50 ? "linear-gradient(135deg,#d97706,#fbbf24)" : "linear-gradient(135deg,#dc2626,#f87171)",
+                        color: "white",
+                        boxShadow: pct >= 70 ? "0 2px 8px rgba(22,163,74,0.35)" : pct >= 50 ? "0 2px 8px rgba(217,119,6,0.3)" : "0 2px 8px rgba(220,38,38,0.3)"
+                      }}
+                    >
+                      {pct}
+                    </div>
+                  )}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      <span className="font-mono text-xs text-white/50">
-                        Q{attempt.question.questionNumber}
-                      </span>
-                      <span className="text-xs text-white/25">
-                        {attempt.question.subject.name}
-                      </span>
+                      <span className="font-mono text-xs" style={{ color: "rgba(240,253,244,0.45)" }}>Q{attempt.question.questionNumber}</span>
+                      <span className="text-xs" style={{ color: "rgba(240,253,244,0.38)" }}>{attempt.question.subject.name}</span>
                       {attempt.question.topic && (
                         <>
-                          <span className="text-white/25">·</span>
-                          <span className="text-xs text-white/25">
-                            {attempt.question.topic.name}
-                          </span>
+                          <span style={{ color: "rgba(240,253,244,0.2)" }}>·</span>
+                          <span className="text-xs" style={{ color: "rgba(240,253,244,0.38)" }}>{attempt.question.topic.name}</span>
                         </>
                       )}
                     </div>
-                    <p className="text-sm text-white/50 truncate">
+                    <p className="text-sm truncate" style={{ color: "rgba(240,253,244,0.45)" }}>
                       {attempt.question.content.substring(0, 80)}...
                     </p>
                   </div>
-                  {pct !== null && (
-                    <div
-                      className={`font-mono text-sm shrink-0 ${
-                        pct >= 70 ? "text-green-400" : pct >= 50 ? "text-violet-300" : "text-red-400"
-                      }`}
-                    >
-                      {pct}%
-                    </div>
-                  )}
-                  <svg className="w-4 h-4 text-white/25 group-hover:text-white/50 transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <svg className="w-4 h-4 shrink-0 transition-colors" style={{ color: "rgba(240,253,244,0.22)" }} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                   </svg>
                 </Link>
@@ -271,23 +298,23 @@ export default async function DashboardPage() {
 
       {/* Empty state CTA */}
       {data.totalAttempts === 0 && (
-        <div className="glass rounded-2xl p-12 text-center border border-white/[0.07]">
-          <div className="font-serif text-3xl text-white mb-3">
-            Ready to start?
+        <div className="card p-12 text-center relative overflow-hidden animate-enter-6">
+          <div className="relative">
+            <div className="text-4xl mb-4">🚀</div>
+            <div className="font-display text-2xl text-white mb-2 font-bold">Ready to start?</div>
+            <p className="mb-7 text-sm max-w-sm mx-auto leading-relaxed" style={{ color: "rgba(240,253,244,0.45)" }}>
+              Browse the question bank, attempt a question, and get instant AI marking against the official mark scheme.
+            </p>
+            <Link
+              href="/questions"
+              className="btn-primary inline-flex items-center gap-2 px-6 py-3"
+            >
+              Browse questions
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+            </Link>
           </div>
-          <p className="text-white/50 mb-6 text-sm max-w-sm mx-auto">
-            Browse the question bank, attempt a question, and get instant AI marking against the
-            official mark scheme.
-          </p>
-          <Link
-            href="/questions"
-            className="inline-flex items-center gap-2 btn-primary px-6 py-3 rounded font-semibold text-sm "
-          >
-            Browse questions
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-            </svg>
-          </Link>
         </div>
       )}
     </div>

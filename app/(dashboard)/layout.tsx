@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { TopBar } from "@/components/layout/TopBar";
+import { DotGrid } from "@/components/ui/DotGrid";
 
 export default async function DashboardLayout({
   children,
@@ -13,11 +14,12 @@ export default async function DashboardLayout({
   if (!session) redirect("/login");
 
   return (
-    <div className="min-h-screen flex bg-[var(--color-bg)]">
+    <div className="fixed inset-0 flex overflow-hidden" style={{ background: "#0d0d0d" }}>
+      <DotGrid />
       <Sidebar user={session.user} />
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative z-10">
         <TopBar user={session.user} />
-        <main className="flex-1 p-6 md:p-8 overflow-auto">{children}</main>
+        <main className="flex-1 overflow-y-auto p-6 md:p-8">{children}</main>
       </div>
     </div>
   );

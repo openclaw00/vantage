@@ -1,38 +1,25 @@
 import type { Metadata } from "next";
-import { Sora, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/SessionProvider";
 
-const sora = Sora({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["300", "400", "500", "600"],
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  weight: ["400", "500"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  title: { default: "Vantage — Exam Prep", template: "%s | Vantage" },
+  title: { default: "Leaply", template: "%s | Leaply" },
   description: "AI-powered exam prep for IGCSE, A-Level and IB. Past papers, mark schemes, and instant AI marking.",
   keywords: ["IGCSE", "A-Level", "IB", "past papers", "exam prep", "AI marking"],
+  icons: {
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${sora.variable} ${plusJakarta.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="min-h-screen">
         <SessionProvider>{children}</SessionProvider>
       </body>

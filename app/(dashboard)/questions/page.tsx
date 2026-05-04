@@ -45,7 +45,7 @@ export default async function QuestionsPage({
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-8">
-        <h1 className="font-serif text-4xl text-[var(--color-text)]">Question Bank</h1>
+        <h1 className="font-display text-4xl text-[var(--color-text)]">Question Bank</h1>
         <p className="text-[var(--color-text-muted)] mt-1 text-sm">
           {total} question{total !== 1 ? "s" : ""} · use the filters to find what you need.
         </p>

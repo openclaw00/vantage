@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+function getOpenAI() {
+  return new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+}
 
 export interface MarkingResult {
   score: number;
@@ -48,7 +50,7 @@ Grade this answer against the mark scheme. Respond with JSON in exactly this for
 
 Grading guide: Excellent = 90-100%, Good = 70-89%, Satisfactory = 50-69%, Needs work = 25-49%, Incomplete = 0-24%.`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
       { role: "system", content: systemPrompt },
@@ -69,7 +71,7 @@ export async function explainText(
   highlightedText: string,
   subject: string
 ): Promise<string> {
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
       {
@@ -96,7 +98,7 @@ export async function generatePracticeQuestion(
   difficulty: "EASY" | "MEDIUM" | "HARD",
   marks: number
 ): Promise<{ question: string; markScheme: string; examinerTip: string }> {
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: [
       {

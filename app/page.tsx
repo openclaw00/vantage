@@ -116,6 +116,29 @@ export default function HomePage() {
         filter: "blur(24px)",
       }} />
 
+      {/* Top-left hero light ray */}
+      <div className="fixed pointer-events-none" style={{
+        top: "-18vh",
+        left: "-16vw",
+        width: "56vw",
+        height: "62vh",
+        background: "linear-gradient(128deg, rgba(240,253,244,0.34) 0%, rgba(34,197,94,0.22) 24%, rgba(20,83,45,0.1) 48%, transparent 72%)",
+        filter: "blur(28px)",
+        transform: "rotate(-8deg)",
+        opacity: 0.9,
+      }} />
+      <div className="fixed pointer-events-none" style={{
+        top: "-30vh",
+        left: "-7vw",
+        width: "18vw",
+        height: "74vh",
+        background: "linear-gradient(160deg, rgba(255,255,255,0.48) 0%, rgba(187,247,208,0.24) 34%, transparent 74%)",
+        filter: "blur(18px)",
+        transform: "rotate(-38deg)",
+        transformOrigin: "top left",
+        opacity: 0.72,
+      }} />
+
       <DotGrid />
 
 

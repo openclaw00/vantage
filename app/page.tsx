@@ -246,9 +246,9 @@ export default function HomePage() {
                 key={board.name}
                 className="flex h-20 items-center justify-center rounded-2xl px-4 transition-all hover:-translate-y-0.5 hover:border-white/20"
                 style={{
-                  background: "rgba(255,255,255,0.08)",
-                  border: "1px solid rgba(255,255,255,0.13)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 44px rgba(0,0,0,0.22)",
+                  background: "rgba(255,255,255,0.16)",
+                  border: "1px solid rgba(255,255,255,0.24)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.18), 0 18px 44px rgba(0,0,0,0.24)",
                   backdropFilter: "blur(16px)",
                   WebkitBackdropFilter: "blur(16px)",
                 }}

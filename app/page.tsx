@@ -118,25 +118,48 @@ export default function HomePage() {
 
       {/* Top-left hero light ray */}
       <div className="fixed pointer-events-none" style={{
-        top: "-18vh",
-        left: "-16vw",
-        width: "56vw",
-        height: "62vh",
-        background: "linear-gradient(128deg, rgba(240,253,244,0.34) 0%, rgba(34,197,94,0.22) 24%, rgba(20,83,45,0.1) 48%, transparent 72%)",
-        filter: "blur(28px)",
-        transform: "rotate(-8deg)",
-        opacity: 0.9,
+        top: "-22vh",
+        left: "-18vw",
+        width: "48vw",
+        height: "48vh",
+        background: "radial-gradient(circle at 24% 18%, rgba(255,255,255,0.98) 0%, rgba(240,253,244,0.82) 13%, rgba(34,197,94,0.4) 32%, rgba(20,83,45,0.16) 52%, transparent 72%)",
+        filter: "blur(18px)",
+        opacity: 0.95,
       }} />
       <div className="fixed pointer-events-none" style={{
-        top: "-30vh",
-        left: "-7vw",
-        width: "18vw",
-        height: "74vh",
-        background: "linear-gradient(160deg, rgba(255,255,255,0.48) 0%, rgba(187,247,208,0.24) 34%, transparent 74%)",
-        filter: "blur(18px)",
-        transform: "rotate(-38deg)",
+        top: "-26vh",
+        left: "-10vw",
+        width: "19vw",
+        height: "92vh",
+        background: "linear-gradient(154deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.72) 10%, rgba(187,247,208,0.42) 28%, rgba(34,197,94,0.2) 48%, transparent 78%)",
+        filter: "blur(10px)",
+        transform: "rotate(-36deg)",
+        transformOrigin: "top left",
+        opacity: 0.92,
+        mixBlendMode: "screen",
+      }} />
+      <div className="fixed pointer-events-none" style={{
+        top: "-20vh",
+        left: "-14vw",
+        width: "42vw",
+        height: "94vh",
+        background: "linear-gradient(150deg, rgba(34,197,94,0.46) 0%, rgba(34,197,94,0.28) 22%, rgba(22,101,52,0.18) 44%, transparent 72%)",
+        filter: "blur(36px)",
+        transform: "rotate(-31deg)",
+        transformOrigin: "top left",
+        opacity: 0.95,
+      }} />
+      <div className="fixed pointer-events-none" style={{
+        top: "-10vh",
+        left: "-11vw",
+        width: "28vw",
+        height: "72vh",
+        background: "linear-gradient(150deg, rgba(255,255,255,0.46) 0%, rgba(220,252,231,0.28) 26%, transparent 70%)",
+        filter: "blur(4px)",
+        transform: "rotate(-37deg)",
         transformOrigin: "top left",
         opacity: 0.72,
+        mixBlendMode: "screen",
       }} />
 
       <DotGrid />

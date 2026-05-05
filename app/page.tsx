@@ -234,26 +234,32 @@ export default function HomePage() {
           <p className="text-[11px] font-mono uppercase tracking-widest mb-6" style={{ color: "rgba(255,255,255,0.45)" }}>
             Trusted by students preparing for
           </p>
-          <div className="grid grid-cols-2 items-center gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 items-center gap-x-4 gap-y-4 sm:grid-cols-3 lg:grid-cols-5">
             {[
-              { name: "Cambridge IGCSE", src: "/exam-boards/cambridge-igcse.png", width: 168 },
-              { name: "Cambridge A Levels", src: "/exam-boards/cambridge-a-levels.png", width: 154 },
-              { name: "Edexcel Pearson", src: "/exam-boards/edexcel-pearson.png", width: 138 },
-              { name: "AQA", src: "/exam-boards/aqa.png", width: 126 },
-              { name: "International Baccalaureate", src: "/exam-boards/ib.png", width: 160 },
+              { name: "Cambridge IGCSE", src: "/exam-boards/cambridge-igcse.png", width: 190 },
+              { name: "Cambridge A Levels", src: "/exam-boards/cambridge-a-levels.png", width: 178 },
+              { name: "Edexcel Pearson", src: "/exam-boards/edexcel-pearson.png", width: 164 },
+              { name: "AQA", src: "/exam-boards/aqa.png", width: 150 },
+              { name: "International Baccalaureate", src: "/exam-boards/ib.png", width: 184 },
             ].map((board) => (
               <div
                 key={board.name}
-                className="flex h-16 items-center justify-center rounded-xl px-3 transition-opacity hover:opacity-100"
-                style={{ opacity: 0.78 }}
+                className="flex h-20 items-center justify-center rounded-2xl px-4 transition-all hover:-translate-y-0.5 hover:border-white/20"
+                style={{
+                  background: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.13)",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 18px 44px rgba(0,0,0,0.22)",
+                  backdropFilter: "blur(16px)",
+                  WebkitBackdropFilter: "blur(16px)",
+                }}
               >
                 <img
                   src={board.src}
                   alt={board.name}
-                  className="max-h-12 object-contain"
+                  className="max-h-14 object-contain"
                   style={{
                     width: `${board.width}px`,
-                    filter: "saturate(0.9) brightness(1.12) contrast(0.96)",
+                    filter: "saturate(0.98) brightness(1.22) contrast(1.04)",
                   }}
                 />
               </div>

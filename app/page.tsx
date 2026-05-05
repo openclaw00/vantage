@@ -1,13 +1,7 @@
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { redirect } from "next/navigation";
 import { DotGrid } from "@/components/ui/DotGrid";
 
-export default async function HomePage() {
-  const session = await getServerSession(authOptions);
-  if (session) redirect("/dashboard");
-
+export default function HomePage() {
   return (
     <div className="min-h-screen overflow-hidden" style={{ background: "#111111", color: "#fff" }}>
 

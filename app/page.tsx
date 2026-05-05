@@ -234,9 +234,29 @@ export default function HomePage() {
           <p className="text-[11px] font-mono uppercase tracking-widest mb-6" style={{ color: "rgba(255,255,255,0.45)" }}>
             Trusted by students preparing for
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-8">
-            {["Cambridge IGCSE", "Cambridge A-Level", "Edexcel", "AQA", "OCR", "IB Diploma"].map((board) => (
-              <span key={board} className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.55)" }}>{board}</span>
+          <div className="grid grid-cols-2 items-center gap-x-8 gap-y-6 sm:grid-cols-3 lg:grid-cols-5">
+            {[
+              { name: "Cambridge IGCSE", src: "/exam-boards/cambridge-igcse.png", width: 168 },
+              { name: "Cambridge A Levels", src: "/exam-boards/cambridge-a-levels.png", width: 154 },
+              { name: "Edexcel Pearson", src: "/exam-boards/edexcel-pearson.png", width: 138 },
+              { name: "AQA", src: "/exam-boards/aqa.png", width: 126 },
+              { name: "International Baccalaureate", src: "/exam-boards/ib.png", width: 160 },
+            ].map((board) => (
+              <div
+                key={board.name}
+                className="flex h-16 items-center justify-center rounded-xl px-3 transition-opacity hover:opacity-100"
+                style={{ opacity: 0.78 }}
+              >
+                <img
+                  src={board.src}
+                  alt={board.name}
+                  className="max-h-12 object-contain"
+                  style={{
+                    width: `${board.width}px`,
+                    filter: "saturate(0.9) brightness(1.12) contrast(0.96)",
+                  }}
+                />
+              </div>
             ))}
           </div>
         </div>

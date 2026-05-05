@@ -74,7 +74,7 @@ export default async function HomePage() {
 
         <h1 className="font-black leading-[0.9] tracking-tighter mb-6 mx-auto text-white"
           style={{ fontSize: "clamp(56px, 9vw, 108px)", maxWidth: "900px" }}>
-          Study smarter.<br />Score higher.
+          Your memory,<br />supercharged.
         </h1>
 
         <p className="text-lg max-w-lg mx-auto mb-10 leading-relaxed" style={{ color: "rgba(255,255,255,0.72)" }}>

@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { SessionProvider } from "@/components/providers/SessionProvider";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata: Metadata = {
   title: { default: "Leaply", template: "%s | Leaply" },
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="min-h-screen">
+        <NextTopLoader color="#10b981" height={2} showSpinner={false} />
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

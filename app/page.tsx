@@ -1,6 +1,105 @@
 import Link from "next/link";
 import { DotGrid } from "@/components/ui/DotGrid";
 
+type SubjectIcon =
+  | "bio"
+  | "math"
+  | "chem"
+  | "physics"
+  | "english"
+  | "econ"
+  | "history"
+  | "cs";
+
+function SubjectGlyph({ icon }: { icon: SubjectIcon }) {
+  const iconProps = {
+    width: 22,
+    height: 22,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true,
+  };
+
+  switch (icon) {
+    case "bio":
+      return (
+        <svg {...iconProps}>
+          <path d="M6.5 13.5c5.2-.1 8.9-3.8 9-9" />
+          <path d="M18 6c-.2 7.5-4.8 12.2-12.5 12.5" />
+          <path d="M8 16 6 14" />
+          <path d="M11.5 14.5 9 12" />
+          <path d="M14 12 12 10" />
+        </svg>
+      );
+    case "math":
+      return (
+        <svg {...iconProps}>
+          <path d="M5 7h14" />
+          <path d="M5 17h14" />
+          <path d="M8 4v6" />
+          <path d="M16 14v6" />
+          <path d="m9 14 6 6" />
+          <path d="m15 14-6 6" />
+        </svg>
+      );
+    case "chem":
+      return (
+        <svg {...iconProps}>
+          <path d="M9 3h6" />
+          <path d="M10 3v5.2l-4.1 7.1A4 4 0 0 0 9.4 21h5.2a4 4 0 0 0 3.5-5.7L14 8.2V3" />
+          <path d="M8.2 15h7.6" />
+        </svg>
+      );
+    case "physics":
+      return (
+        <svg {...iconProps}>
+          <circle cx="12" cy="12" r="1.8" />
+          <ellipse cx="12" cy="12" rx="8" ry="3.2" />
+          <ellipse cx="12" cy="12" rx="8" ry="3.2" transform="rotate(60 12 12)" />
+          <ellipse cx="12" cy="12" rx="8" ry="3.2" transform="rotate(120 12 12)" />
+        </svg>
+      );
+    case "english":
+      return (
+        <svg {...iconProps}>
+          <path d="M5 5.5h8a4 4 0 0 1 4 4V19H9a4 4 0 0 0-4 2V5.5Z" />
+          <path d="M9 9h5" />
+          <path d="M9 13h4" />
+        </svg>
+      );
+    case "econ":
+      return (
+        <svg {...iconProps}>
+          <path d="M4 19h16" />
+          <path d="M7 16v-5" />
+          <path d="M12 16V7" />
+          <path d="M17 16v-9" />
+          <path d="m5 10 5-5 4 4 5-5" />
+        </svg>
+      );
+    case "history":
+      return (
+        <svg {...iconProps}>
+          <path d="M12 7v5l3 2" />
+          <path d="M5.4 5.4A9 9 0 1 1 3 12" />
+          <path d="M3 5v5h5" />
+        </svg>
+      );
+    case "cs":
+      return (
+        <svg {...iconProps}>
+          <path d="m8 9-4 3 4 3" />
+          <path d="m16 9 4 3-4 3" />
+          <path d="m13 7-2 10" />
+        </svg>
+      );
+  }
+}
+
 export default function HomePage() {
   return (
     <div className="min-h-screen overflow-hidden" style={{ background: "#111111", color: "#fff" }}>
@@ -191,26 +290,45 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
-              { name: "Biology", board: "Cambridge IGCSE", code: "0610", live: true },
-              { name: "Mathematics", board: "Cambridge A-Level", code: "9709", live: true },
-              { name: "Chemistry", board: "Cambridge IGCSE", code: "0620", live: false },
-              { name: "Physics", board: "Cambridge IGCSE", code: "0625", live: false },
-              { name: "English Lang.", board: "Cambridge IGCSE", code: "0500", live: false },
-              { name: "Economics", board: "Cambridge A-Level", code: "9708", live: false },
-              { name: "History", board: "Cambridge A-Level", code: "9489", live: false },
-              { name: "Computer Sci.", board: "Cambridge A-Level", code: "9618", live: false },
+              { name: "Biology", board: "Cambridge IGCSE", code: "0610", icon: "bio", accent: "#22c55e" },
+              { name: "Mathematics", board: "Cambridge A-Level", code: "9709", icon: "math", accent: "#38bdf8" },
+              { name: "Chemistry", board: "Cambridge IGCSE", code: "0620", icon: "chem", accent: "#f59e0b" },
+              { name: "Physics", board: "Cambridge IGCSE", code: "0625", icon: "physics", accent: "#a78bfa" },
+              { name: "English Lang.", board: "Cambridge IGCSE", code: "0500", icon: "english", accent: "#fb7185" },
+              { name: "Economics", board: "Cambridge A-Level", code: "9708", icon: "econ", accent: "#2dd4bf" },
+              { name: "History", board: "Cambridge A-Level", code: "9489", icon: "history", accent: "#eab308" },
+              { name: "Computer Sci.", board: "Cambridge A-Level", code: "9618", icon: "cs", accent: "#60a5fa" },
             ].map((s) => (
-              <div key={s.code} className="p-6 rounded-2xl transition-all hover:border-white/20"
-                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: s.live ? "#22c55e" : "rgba(255,255,255,0.25)" }} />
-                  <span className="text-[9px] font-mono" style={{ color: s.live ? "#22c55e" : "rgba(255,255,255,0.3)" }}>
-                    {s.live ? "LIVE" : "SOON"}
+              <div key={s.code} className="group p-5 rounded-2xl transition-all hover:-translate-y-0.5 hover:border-white/20"
+                style={{
+                  background: `linear-gradient(145deg, ${s.accent}14 0%, rgba(255,255,255,0.04) 46%)`,
+                  border: "1px solid rgba(255,255,255,0.1)",
+                }}>
+                <div className="flex items-start justify-between mb-5">
+                  <div
+                    className="grid h-10 w-10 place-items-center rounded-xl transition-transform group-hover:scale-105"
+                    style={{
+                      color: s.accent,
+                      background: `${s.accent}18`,
+                      border: `1px solid ${s.accent}33`,
+                    }}
+                  >
+                    <SubjectGlyph icon={s.icon as SubjectIcon} />
+                  </div>
+                  <span
+                    className="rounded-full px-2.5 py-1 text-[9px] font-mono uppercase"
+                    style={{
+                      color: s.accent,
+                      background: `${s.accent}12`,
+                      border: `1px solid ${s.accent}26`,
+                    }}
+                  >
+                    Available
                   </span>
                 </div>
-                <div className="font-bold text-sm mb-0.5" style={{ color: s.live ? "#fff" : "rgba(255,255,255,0.45)" }}>{s.name}</div>
-                <div className="text-[11px]" style={{ color: s.live ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.3)" }}>{s.board}</div>
-                <div className="font-mono text-[10px] mt-1" style={{ color: s.live ? "rgba(255,255,255,0.35)" : "rgba(255,255,255,0.2)" }}>{s.code}</div>
+                <div className="font-bold text-sm mb-0.5 text-white">{s.name}</div>
+                <div className="text-[11px]" style={{ color: "rgba(255,255,255,0.52)" }}>{s.board}</div>
+                <div className="font-mono text-[10px] mt-2" style={{ color: "rgba(255,255,255,0.38)" }}>{s.code}</div>
               </div>
             ))}
           </div>

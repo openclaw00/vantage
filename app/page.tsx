@@ -115,53 +115,6 @@ export default function HomePage() {
         background: "linear-gradient(to left, rgba(34,197,94,0.05) 0%, transparent 100%)",
         filter: "blur(24px)",
       }} />
-
-      {/* Top-left hero light ray */}
-      <div className="fixed pointer-events-none" style={{
-        top: "-22vh",
-        left: "-18vw",
-        width: "48vw",
-        height: "48vh",
-        background: "radial-gradient(circle at 24% 18%, rgba(255,255,255,0.98) 0%, rgba(240,253,244,0.82) 13%, rgba(34,197,94,0.4) 32%, rgba(20,83,45,0.16) 52%, transparent 72%)",
-        filter: "blur(18px)",
-        opacity: 0.95,
-      }} />
-      <div className="fixed pointer-events-none" style={{
-        top: "-26vh",
-        left: "-10vw",
-        width: "19vw",
-        height: "92vh",
-        background: "linear-gradient(154deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.72) 10%, rgba(187,247,208,0.42) 28%, rgba(34,197,94,0.2) 48%, transparent 78%)",
-        filter: "blur(10px)",
-        transform: "rotate(-36deg)",
-        transformOrigin: "top left",
-        opacity: 0.92,
-        mixBlendMode: "screen",
-      }} />
-      <div className="fixed pointer-events-none" style={{
-        top: "-20vh",
-        left: "-14vw",
-        width: "42vw",
-        height: "94vh",
-        background: "linear-gradient(150deg, rgba(34,197,94,0.46) 0%, rgba(34,197,94,0.28) 22%, rgba(22,101,52,0.18) 44%, transparent 72%)",
-        filter: "blur(36px)",
-        transform: "rotate(-31deg)",
-        transformOrigin: "top left",
-        opacity: 0.95,
-      }} />
-      <div className="fixed pointer-events-none" style={{
-        top: "-10vh",
-        left: "-11vw",
-        width: "28vw",
-        height: "72vh",
-        background: "linear-gradient(150deg, rgba(255,255,255,0.46) 0%, rgba(220,252,231,0.28) 26%, transparent 70%)",
-        filter: "blur(4px)",
-        transform: "rotate(-37deg)",
-        transformOrigin: "top left",
-        opacity: 0.72,
-        mixBlendMode: "screen",
-      }} />
-
       <DotGrid />
 
 
@@ -200,8 +153,54 @@ export default function HomePage() {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative pt-48 pb-28 px-6 text-center">
-        <div className="inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-xs mb-10 cursor-pointer hover:bg-white/5 transition-colors" style={{
+      <section className="relative overflow-hidden pt-48 pb-28 px-6 text-center">
+        {/* Top-left hero light ray */}
+        <div className="absolute pointer-events-none" style={{
+          top: "-24vh",
+          left: "-18vw",
+          width: "54vw",
+          height: "56vh",
+          background: "radial-gradient(circle at 24% 18%, rgba(255,255,255,0.98) 0%, rgba(240,253,244,0.82) 13%, rgba(34,197,94,0.4) 32%, rgba(20,83,45,0.16) 52%, transparent 72%)",
+          filter: "blur(18px)",
+          opacity: 0.95,
+        }} />
+        <div className="absolute pointer-events-none" style={{
+          top: "-42vh",
+          left: "-10vw",
+          width: "22vw",
+          height: "184vh",
+          background: "linear-gradient(154deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.72) 8%, rgba(187,247,208,0.42) 24%, rgba(34,197,94,0.2) 46%, transparent 82%)",
+          filter: "blur(10px)",
+          transform: "rotate(-36deg)",
+          transformOrigin: "top left",
+          opacity: 0.92,
+          mixBlendMode: "screen",
+        }} />
+        <div className="absolute pointer-events-none" style={{
+          top: "-34vh",
+          left: "-16vw",
+          width: "52vw",
+          height: "188vh",
+          background: "linear-gradient(150deg, rgba(34,197,94,0.46) 0%, rgba(34,197,94,0.28) 20%, rgba(22,101,52,0.18) 43%, transparent 76%)",
+          filter: "blur(36px)",
+          transform: "rotate(-31deg)",
+          transformOrigin: "top left",
+          opacity: 0.95,
+        }} />
+        <div className="absolute pointer-events-none" style={{
+          top: "-20vh",
+          left: "-12vw",
+          width: "32vw",
+          height: "144vh",
+          background: "linear-gradient(150deg, rgba(255,255,255,0.46) 0%, rgba(220,252,231,0.28) 24%, transparent 74%)",
+          filter: "blur(4px)",
+          transform: "rotate(-37deg)",
+          transformOrigin: "top left",
+          opacity: 0.72,
+          mixBlendMode: "screen",
+        }} />
+
+        <div className="relative z-10 inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-xs mb-10 cursor-pointer hover:bg-white/5 transition-colors" style={{
           background: "rgba(255,255,255,0.07)",
           border: "1px solid rgba(255,255,255,0.12)",
           color: "rgba(255,255,255,0.75)",
@@ -211,16 +210,16 @@ export default function HomePage() {
           <span style={{ color: "rgba(255,255,255,0.4)" }}>↗</span>
         </div>
 
-        <h1 className="font-black leading-[0.9] tracking-tighter mb-6 mx-auto text-white"
+        <h1 className="relative z-10 font-black leading-[0.9] tracking-tighter mb-6 mx-auto text-white"
           style={{ fontSize: "clamp(56px, 9vw, 108px)", maxWidth: "900px" }}>
           Your memory,<br />supercharged.
         </h1>
 
-        <p className="text-lg max-w-lg mx-auto mb-10 leading-relaxed" style={{ color: "rgba(255,255,255,0.72)" }}>
+        <p className="relative z-10 text-lg max-w-lg mx-auto mb-10 leading-relaxed" style={{ color: "rgba(255,255,255,0.72)" }}>
           Past papers, AI marking, and spaced repetition — everything you need to go from revision to top grades.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-24">
+        <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-3 mb-24">
           <Link href="/register" className="px-7 py-3 text-[15px] rounded-lg font-semibold text-black transition-opacity hover:opacity-90"
             style={{ background: "#fff" }}>
             Try Leaply free
@@ -231,7 +230,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.09)", paddingTop: "40px" }}>
+        <div className="relative z-10" style={{ borderTop: "1px solid rgba(255,255,255,0.09)", paddingTop: "40px" }}>
           <p className="text-[11px] font-mono uppercase tracking-widest mb-6" style={{ color: "rgba(255,255,255,0.45)" }}>
             Trusted by students preparing for
           </p>

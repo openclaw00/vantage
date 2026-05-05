@@ -7,6 +7,11 @@ datasource db {
   url       = env("DATABASE_URL")
 }
 
+enum Tier {
+  FREE
+  PRO
+}
+
 // ─── Auth (NextAuth) ────────────────────────────────────────────────────────
 
 model Account {
@@ -54,7 +59,7 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
-  tier          String      @default("FREE")
+  tier          Tier      @default(FREE)
 
   stripeCustomerId       String?   @unique
   stripeSubscriptionId   String?   @unique

@@ -256,10 +256,8 @@ export default async function DashboardPage() {
                 <Link
                   key={attempt.id}
                   href={`/questions/${attempt.questionId}`}
-                  className="flex items-center gap-4 px-6 py-4 group transition-all duration-150"
+                  className="flex items-center gap-4 px-6 py-4 group transition-all duration-150 hover:bg-white/[0.03]"
                   style={{ borderBottom: idx < data.recentAttempts.length - 1 ? "1px solid rgba(0,0,0,0.05)" : "none" }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = "rgba(255,255,255,0.03)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = ""; }}
                 >
                   {/* Score ring */}
                   {pct !== null && (

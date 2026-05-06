@@ -1,4 +1,7 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { DotGrid } from "@/components/ui/DotGrid";
 
 type SubjectIcon =
@@ -100,7 +103,10 @@ function SubjectGlyph({ icon }: { icon: SubjectIcon }) {
   }
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const session = await getServerSession(authOptions);
+  if (session) redirect("/dashboard");
+
   return (
     <div className="min-h-screen overflow-hidden" style={{ background: "#111111", color: "#fff" }}>
 

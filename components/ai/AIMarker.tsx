@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { MarkingResult } from "@/lib/ai";
+import { normalizeMarkingResult, type MarkingResult } from "@/lib/ai";
 import Link from "next/link";
 
 interface Props {
@@ -42,7 +42,8 @@ export function AIMarker({ questionId, questionMarks, isPro, previousAnswer, pre
       setError({ message: json.error ?? "Marking failed", upgradeRequired: json.upgradeRequired });
       return;
     }
-    setResult(await res.json() as MarkingResult);
+    const json = await res.json();
+    setResult(normalizeMarkingResult(json, questionMarks));
     setTab("result");
   };
 
@@ -146,7 +147,7 @@ export function AIMarker({ questionId, questionMarks, isPro, previousAnswer, pre
           <div className="h-2 rounded-full" style={{ background: "rgba(255,255,255,0.1)" }}>
             <div
               className={`h-full rounded-full bg-gradient-to-r ${g.bar} transition-all duration-700`}
-              style={{ width: `${result.percentage}%` }}
+              style={{ width: `${Math.min(100, Math.max(0, result.percentage))}%` }}
             />
           </div>
 

@@ -7,6 +7,7 @@ import { DifficultyBadge } from "@/components/ui/DifficultyBadge";
 import { LevelBadge } from "@/components/ui/LevelBadge";
 import { MarkSchemePanel } from "@/components/questions/MarkSchemePanel";
 import { AIMarker } from "@/components/ai/AIMarker";
+import { parseMarkingResult } from "@/lib/ai";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -162,11 +163,7 @@ export default async function QuestionPage({ params }: { params: { id: string } 
             questionMarks={question.marks}
             isPro={isPro}
             previousAnswer={lastAttempt?.answer ?? undefined}
-            previousFeedback={
-              lastAttempt?.aiFeedback
-                ? (JSON.parse(lastAttempt.aiFeedback) as import("@/lib/ai").MarkingResult)
-                : undefined
-            }
+            previousFeedback={parseMarkingResult(lastAttempt?.aiFeedback, question.marks)}
           />
         ) : (
           <div className="p-8 text-center">

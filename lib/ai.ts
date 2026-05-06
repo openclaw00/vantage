@@ -15,6 +15,51 @@ export interface MarkingResult {
   improvedAnswer: string;
 }
 
+const VALID_GRADES = ["Excellent", "Good", "Satisfactory", "Needs work", "Incomplete"] as const;
+
+function coerceNumber(value: unknown, fallback: number) {
+  const number = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(number) ? number : fallback;
+}
+
+export function normalizeMarkingResult(value: unknown, fallbackMaxScore: number): MarkingResult {
+  const input = value && typeof value === "object" ? value as Record<string, unknown> : {};
+  const maxScore = Math.max(1, Math.round(coerceNumber(input.maxScore, fallbackMaxScore)));
+  const score = Math.min(maxScore, Math.max(0, Math.round(coerceNumber(input.score, 0))));
+  const percentage = Math.min(100, Math.max(0, Math.round(coerceNumber(input.percentage, (score / maxScore) * 100))));
+  const grade = VALID_GRADES.includes(input.grade as MarkingResult["grade"])
+    ? input.grade as MarkingResult["grade"]
+    : percentage >= 90
+      ? "Excellent"
+      : percentage >= 70
+        ? "Good"
+        : percentage >= 50
+          ? "Satisfactory"
+          : percentage >= 25
+            ? "Needs work"
+            : "Incomplete";
+
+  return {
+    score,
+    maxScore,
+    percentage,
+    grade,
+    whatYouGotRight: typeof input.whatYouGotRight === "string" ? input.whatYouGotRight : "No specific strengths were returned.",
+    whatsMissing: typeof input.whatsMissing === "string" ? input.whatsMissing : "No specific missing points were returned.",
+    examinerTip: typeof input.examinerTip === "string" ? input.examinerTip : "Review the mark scheme and make each marking point explicit.",
+    improvedAnswer: typeof input.improvedAnswer === "string" ? input.improvedAnswer : "",
+  };
+}
+
+export function parseMarkingResult(value: string | null | undefined, fallbackMaxScore: number) {
+  if (!value) return undefined;
+  try {
+    return normalizeMarkingResult(JSON.parse(value), fallbackMaxScore);
+  } catch {
+    return undefined;
+  }
+}
+
 export async function markAnswer(
   questionContent: string,
   markScheme: string,
@@ -63,7 +108,7 @@ Grading guide: Excellent = 90-100%, Good = 70-89%, Satisfactory = 50-69%, Needs 
   const content = response.choices[0].message.content;
   if (!content) throw new Error("No response from AI");
 
-  return JSON.parse(content) as MarkingResult;
+  return normalizeMarkingResult(JSON.parse(content), maxMarks);
 }
 
 export async function explainText(

@@ -1,8 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-
-const ExamBoard = { CAMBRIDGE: "CAMBRIDGE", EDEXCEL: "EDEXCEL", AQA: "AQA", OCR: "OCR", IB: "IB" } as const;
-const Level     = { IGCSE: "IGCSE", A_LEVEL: "A_LEVEL", IB_SL: "IB_SL", IB_HL: "IB_HL" } as const;
-const Difficulty = { EASY: "EASY", MEDIUM: "MEDIUM", HARD: "HARD" } as const;
+import { Difficulty, ExamBoard, Level, PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -32,8 +28,8 @@ async function main() {
     create: {
       name: "Biology",
       code: "0610",
-      examBoard: "CAMBRIDGE",
-      level: "IGCSE",
+      examBoard: ExamBoard.CAMBRIDGE,
+      level: Level.IGCSE,
       color: "#16A34A",
     },
   });
@@ -44,8 +40,8 @@ async function main() {
     create: {
       name: "Mathematics",
       code: "9709",
-      examBoard: "CAMBRIDGE",
-      level: "A_LEVEL",
+      examBoard: ExamBoard.CAMBRIDGE,
+      level: Level.A_LEVEL,
       color: "#2563EB",
     },
   });
@@ -553,7 +549,12 @@ Reject H₀. There is sufficient evidence at the 5% level to support the manager
   ];
 
   for (const q of [...bioQuestions, ...mathsQuestions]) {
-    await prisma.question.create({ data: q });
+    await prisma.question.create({
+      data: {
+        ...q,
+        difficulty: Difficulty[q.difficulty as keyof typeof Difficulty],
+      },
+    });
   }
 
   console.log(`✓ Created ${bioQuestions.length + mathsQuestions.length} questions`);

@@ -12,6 +12,27 @@ enum Tier {
   PRO
 }
 
+enum ExamBoard {
+  CAMBRIDGE
+  EDEXCEL
+  AQA
+  OCR
+  IB
+}
+
+enum Level {
+  IGCSE
+  A_LEVEL
+  IB_SL
+  IB_HL
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
 // ─── Auth (NextAuth) ────────────────────────────────────────────────────────
 
 model Account {
@@ -86,8 +107,8 @@ model Subject {
   id          String    @id @default(cuid())
   name        String
   code        String    @unique
-  examBoard   String
-  level       String
+  examBoard   ExamBoard
+  level       Level
   color       String    @default("#D97706")
 
   questions  Question[]
@@ -107,6 +128,8 @@ model Topic {
   subject    Subject     @relation(fields: [subjectId], references: [id])
   questions  Question[]
   flashcards Flashcard[]
+
+  @@index([subjectId])
 }
 
 model Question {
@@ -115,7 +138,7 @@ model Question {
   paper          String?
   questionNumber String
   marks          Int
-  difficulty     String
+  difficulty     Difficulty
   content        String     
   imageUrl       String?
   markScheme     String     
@@ -128,6 +151,11 @@ model Question {
   attempts QuestionAttempt[]
 
   createdAt DateTime @default(now())
+
+  @@index([subjectId, year])
+  @@index([topicId, year])
+  @@index([difficulty, year])
+  @@index([year])
 }
 
 
@@ -145,6 +173,9 @@ model QuestionAttempt {
 
   user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   question Question @relation(fields: [questionId], references: [id])
+
+  @@index([questionId])
+  @@index([userId, createdAt])
 }
 
 // ─── Flashcards ─────────────────────────────────────────────────────────────

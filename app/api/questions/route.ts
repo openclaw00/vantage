@@ -1,31 +1,38 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 
+const DIFFICULTIES = new Set(["EASY", "MEDIUM", "HARD"]);
+const EXAM_BOARDS = new Set(["CAMBRIDGE", "EDEXCEL", "AQA", "OCR", "IB"]);
+const LEVELS = new Set(["IGCSE", "A_LEVEL", "IB_SL", "IB_HL"]);
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const subjectId  = searchParams.get("subjectId") || undefined;
   const topicId    = searchParams.get("topicId") || undefined;
   const difficulty = searchParams.get("difficulty") || undefined;
-  const year       = searchParams.get("year") ? parseInt(searchParams.get("year")!) : undefined;
+  const yearRaw    = searchParams.get("year");
+  const year       = yearRaw ? Number.parseInt(yearRaw, 10) : undefined;
   const examBoard  = searchParams.get("examBoard") || undefined;
   const level      = searchParams.get("level") || undefined;
-  const page       = parseInt(searchParams.get("page") || "1");
-  const limit      = parseInt(searchParams.get("limit") || "20");
+  const pageRaw    = Number.parseInt(searchParams.get("page") || "1", 10);
+  const limitRaw   = Number.parseInt(searchParams.get("limit") || "20", 10);
+  const page       = Number.isFinite(pageRaw) && pageRaw > 0 ? pageRaw : 1;
+  const limit      = Number.isFinite(limitRaw) && limitRaw > 0 ? Math.min(limitRaw, 100) : 20;
 
   const where: Record<string, unknown> = {};
 
   if (subjectId)  where.subjectId = subjectId;
   if (topicId)    where.topicId = topicId;
-  if (difficulty) where.difficulty = difficulty;
-  if (year)       where.year = year;
+  if (difficulty && DIFFICULTIES.has(difficulty)) where.difficulty = difficulty;
+  if (year && Number.isFinite(year)) where.year = year;
 
-  if (examBoard || level) {
-    where.subject = {
-      ...(examBoard ? { examBoard: examBoard } : {}),
-      ...(level    ? { level: level }         : {}),
-    };
-  }
+  const subjectWhere = {
+    ...(examBoard && EXAM_BOARDS.has(examBoard) ? { examBoard } : {}),
+    ...(level && LEVELS.has(level) ? { level } : {}),
+  };
+
+  if (Object.keys(subjectWhere).length > 0) where.subject = subjectWhere;
 
   const [questions, total] = await Promise.all([
     prisma.question.findMany({

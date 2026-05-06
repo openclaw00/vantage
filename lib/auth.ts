@@ -41,6 +41,14 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      const target = new URL(url, baseUrl);
+      if (target.origin !== baseUrl) return baseUrl;
+      if (target.pathname === "/login" || target.pathname === "/register") {
+        return `${baseUrl}/dashboard`;
+      }
+      return target.toString();
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;

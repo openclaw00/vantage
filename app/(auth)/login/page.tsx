@@ -30,7 +30,17 @@ type Form = z.infer<typeof schema>;
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
+  const rawCallbackUrl = searchParams.get("callbackUrl");
+  const callbackUrl = (() => {
+    if (!rawCallbackUrl) return "/dashboard";
+    try {
+      const url = new URL(rawCallbackUrl, window.location.origin);
+      if (url.pathname === "/login" || url.pathname === "/register") return "/dashboard";
+      return `${url.pathname}${url.search}${url.hash}`;
+    } catch {
+      return "/dashboard";
+    }
+  })();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);

@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="min-h-screen">
-        <NextTopLoader color="#10b981" height={2} showSpinner={false} />
+        <NextTopLoader color="#10b981" height={4} showSpinner={false} />
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

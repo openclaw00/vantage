@@ -1,8 +1,9 @@
 "use client";
 
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { useCallback } from "react";
+import { useCallback, useMemo, useState, useTransition } from "react";
+import { useTopLoader } from "nextjs-toploader";
 import { DifficultyBadge } from "@/components/ui/DifficultyBadge";
 import { LevelBadge } from "@/components/ui/LevelBadge";
 
@@ -24,9 +25,8 @@ interface Topic   { id: string; name: string; subjectId: string }
 
 interface Props {
   questions: Question[];
-  total: number;
   page: number;
-  totalPages: number;
+  pageSize: number;
   subjects: Subject[];
   topics: Topic[];
   years: number[];
@@ -42,23 +42,83 @@ const filterBtn = (active: boolean) => ({
   borderRadius: "8px",
 });
 
-export function QuestionList({ questions, total, page, totalPages, subjects, topics, years, filters }: Props) {
-  const router   = useRouter();
+export function QuestionList({ questions, page, pageSize, subjects, topics, years, filters: initialFilters }: Props) {
   const pathname = usePathname();
-  const sp       = useSearchParams();
+  const loader   = useTopLoader();
+  const [filters, setFilters] = useState(initialFilters);
+  const [currentPage, setCurrentPage] = useState(page);
+  const [, startTransition] = useTransition();
+
+  const updateUrl = useCallback(
+    (nextFilters: Props["filters"], nextPage: number) => {
+      const params = new URLSearchParams();
+      if (nextFilters.subject) params.set("subject", nextFilters.subject);
+      if (nextFilters.topic) params.set("topic", nextFilters.topic);
+      if (nextFilters.difficulty) params.set("difficulty", nextFilters.difficulty);
+      if (nextFilters.year) params.set("year", nextFilters.year);
+      if (nextPage > 1) params.set("page", String(nextPage));
+
+      const query = params.toString();
+      window.history.pushState(null, "", query ? `${pathname}?${query}` : pathname);
+    },
+    [pathname]
+  );
 
   const updateFilter = useCallback(
     (key: string, value: string | undefined) => {
-      const params = new URLSearchParams(sp.toString());
-      if (value) { params.set(key, value); } else { params.delete(key); }
-      params.delete("page");
-      if (key === "subject") params.delete("topic");
-      router.push(`${pathname}?${params.toString()}`);
+      startTransition(() => {
+        const nextFilters = { ...filters, [key]: value };
+        if (!value) delete nextFilters[key as keyof typeof nextFilters];
+        if (key === "subject") delete nextFilters.topic;
+
+        setFilters(nextFilters);
+        setCurrentPage(1);
+        updateUrl(nextFilters, 1);
+      });
     },
-    [router, pathname, sp]
+    [filters, updateUrl]
+  );
+
+  const clearFilters = useCallback(() => {
+    startTransition(() => {
+      setFilters({});
+      setCurrentPage(1);
+      updateUrl({}, 1);
+    });
+  }, [updateUrl]);
+
+  const goToPage = useCallback(
+    (targetPage: number) => {
+      startTransition(() => {
+        setCurrentPage(targetPage);
+        updateUrl(filters, targetPage);
+      });
+    },
+    [filters, updateUrl]
   );
 
   const filteredTopics = filters.subject ? topics.filter((t) => t.subjectId === filters.subject) : topics;
+  const startLoader = useCallback(() => {
+    loader.start();
+    window.setTimeout(() => loader.done(), 150);
+  }, [loader]);
+
+  const filteredQuestions = useMemo(
+    () =>
+      questions.filter((q) => {
+        if (filters.subject && q.subjectId !== filters.subject) return false;
+        if (filters.topic && q.topic?.id !== filters.topic) return false;
+        if (filters.difficulty && q.difficulty !== filters.difficulty) return false;
+        if (filters.year && q.year !== Number.parseInt(filters.year, 10)) return false;
+        return true;
+      }),
+    [filters, questions]
+  );
+
+  const total = filteredQuestions.length;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const safePage = Math.min(currentPage, totalPages);
+  const visibleQuestions = filteredQuestions.slice((safePage - 1) * pageSize, safePage * pageSize);
 
   const filterLabel = "font-mono text-[10px] uppercase tracking-widest mb-2 block";
 
@@ -71,8 +131,9 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
           <span className={filterLabel} style={{ color: "rgba(240,253,244,0.28)" }}>Subject</span>
           <div className="space-y-0.5">
             <button
-              onClick={() => updateFilter("subject", undefined)}
-              className="w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150"
+              type="button"
+              onClick={() => { startLoader(); updateFilter("subject", undefined); }}
+              className="block w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150"
               style={filterBtn(!filters.subject)}
             >
               All subjects
@@ -80,8 +141,9 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
             {subjects.map((s) => (
               <button
                 key={s.id}
-                onClick={() => updateFilter("subject", s.id)}
-                className="w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150"
+                type="button"
+                onClick={() => { startLoader(); updateFilter("subject", s.id); }}
+                className="block w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150"
                 style={filterBtn(filters.subject === s.id)}
               >
                 {s.name}
@@ -96,8 +158,9 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
             <span className={filterLabel} style={{ color: "rgba(240,253,244,0.28)" }}>Topic</span>
             <div className="space-y-0.5">
               <button
-                onClick={() => updateFilter("topic", undefined)}
-                className="w-full text-left px-2.5 py-1.5 text-xs transition-all duration-150"
+                type="button"
+                onClick={() => { startLoader(); updateFilter("topic", undefined); }}
+                className="block w-full text-left px-2.5 py-1.5 text-xs transition-all duration-150"
                 style={filterBtn(!filters.topic)}
               >
                 All topics
@@ -105,8 +168,9 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
               {filteredTopics.map((t) => (
                 <button
                   key={t.id}
-                  onClick={() => updateFilter("topic", t.id)}
-                  className="w-full text-left px-2.5 py-1.5 text-xs transition-all duration-150"
+                  type="button"
+                  onClick={() => { startLoader(); updateFilter("topic", t.id); }}
+                  className="block w-full text-left px-2.5 py-1.5 text-xs transition-all duration-150"
                   style={filterBtn(filters.topic === t.id)}
                 >
                   {t.name}
@@ -121,8 +185,9 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
           <span className={filterLabel} style={{ color: "rgba(240,253,244,0.28)" }}>Difficulty</span>
           <div className="space-y-0.5">
             <button
-              onClick={() => updateFilter("difficulty", undefined)}
-              className="w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150"
+              type="button"
+              onClick={() => { startLoader(); updateFilter("difficulty", undefined); }}
+              className="block w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150"
               style={filterBtn(!filters.difficulty)}
             >
               All
@@ -130,8 +195,9 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
             {DIFFICULTIES.map((d) => (
               <button
                 key={d}
-                onClick={() => updateFilter("difficulty", d)}
-                className="w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150 flex items-center gap-2"
+                type="button"
+                onClick={() => { startLoader(); updateFilter("difficulty", d); }}
+                className="block w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150 flex items-center gap-2"
                 style={filterBtn(filters.difficulty === d)}
               >
                 <span className={`w-1.5 h-1.5 rounded-full ${
@@ -148,8 +214,9 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
           <span className={filterLabel} style={{ color: "rgba(240,253,244,0.28)" }}>Year</span>
           <div className="space-y-0.5">
             <button
-              onClick={() => updateFilter("year", undefined)}
-              className="w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150"
+              type="button"
+              onClick={() => { startLoader(); updateFilter("year", undefined); }}
+              className="block w-full text-left px-2.5 py-1.5 text-sm transition-all duration-150"
               style={filterBtn(!filters.year)}
             >
               All years
@@ -157,8 +224,9 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
             {years.map((y) => (
               <button
                 key={y}
-                onClick={() => updateFilter("year", String(y))}
-                className="w-full text-left px-2.5 py-1.5 text-sm font-mono transition-all duration-150"
+                type="button"
+                onClick={() => { startLoader(); updateFilter("year", String(y)); }}
+                className="block w-full text-left px-2.5 py-1.5 text-sm font-mono transition-all duration-150"
                 style={filterBtn(filters.year === String(y))}
               >
                 {y}
@@ -169,7 +237,8 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
 
         {(filters.subject || filters.topic || filters.difficulty || filters.year) && (
           <button
-            onClick={() => router.push(pathname)}
+            type="button"
+            onClick={() => { startLoader(); clearFilters(); }}
             className="text-xs transition-colors inline-flex items-center gap-1"
             style={{ color: "rgba(240,253,244,0.3)" }}
             onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#4ade80"; }}
@@ -183,14 +252,15 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
 
       {/* ── Question list ── */}
       <div className="flex-1 min-w-0 space-y-3">
-        {questions.length === 0 ? (
+        {visibleQuestions.length === 0 ? (
           <div className="rounded-2xl p-12 text-center" style={{
             background: "rgba(255,255,255,0.04)",
             border: "1px solid rgba(255,255,255,0.08)",
           }}>
             <div className="mb-2" style={{ color: "rgba(240,253,244,0.45)" }}>No questions match your filters.</div>
             <button
-              onClick={() => router.push(pathname)}
+              type="button"
+              onClick={() => { startLoader(); clearFilters(); }}
               className="text-sm transition-colors"
               style={{ color: "#4ade80" }}
             >
@@ -198,10 +268,11 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
             </button>
           </div>
         ) : (
-          questions.map((q) => (
+          visibleQuestions.map((q) => (
             <Link
               key={q.id}
               href={`/questions/${q.id}`}
+              onClick={startLoader}
               className="rounded-2xl flex items-start gap-4 p-5 transition-all duration-200 group block"
               style={{
                 background: "rgba(255,255,255,0.04)",
@@ -282,14 +353,13 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
         {totalPages > 1 && (
           <div className="flex items-center justify-between pt-4">
             <span className="text-xs font-mono" style={{ color: "rgba(240,253,244,0.35)" }}>
-              {total} questions · page {page} of {totalPages}
+              {total} questions · page {safePage} of {totalPages}
             </span>
             <div className="flex gap-2">
-              {page > 1 && (
-                <Link
-                  href={`${pathname}?${new URLSearchParams({ ...Object.fromEntries(
-                    Object.entries(filters).filter(([, v]) => v !== undefined) as [string, string][]
-                  ), page: String(page - 1) })}`}
+              {safePage > 1 && (
+                <button
+                  type="button"
+                  onClick={() => { startLoader(); goToPage(safePage - 1); }}
                   className="px-3 py-1.5 rounded text-xs transition-all duration-150"
                   style={{
                     border: "1px solid rgba(255,255,255,0.1)",
@@ -299,13 +369,12 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                 >
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M7 16l-4-4m0 0l4-4m-4 4h18" /></svg>
                   Previous
-                </Link>
+                </button>
               )}
-              {page < totalPages && (
-                <Link
-                  href={`${pathname}?${new URLSearchParams({ ...Object.fromEntries(
-                    Object.entries(filters).filter(([, v]) => v !== undefined) as [string, string][]
-                  ), page: String(page + 1) })}`}
+              {safePage < totalPages && (
+                <button
+                  type="button"
+                  onClick={() => { startLoader(); goToPage(safePage + 1); }}
                   className="px-3 py-1.5 rounded text-xs transition-all duration-150"
                   style={{
                     border: "1px solid rgba(255,255,255,0.1)",
@@ -315,7 +384,7 @@ export function QuestionList({ questions, total, page, totalPages, subjects, top
                 >
                   Next
                   <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                </Link>
+                </button>
               )}
             </div>
           </div>
